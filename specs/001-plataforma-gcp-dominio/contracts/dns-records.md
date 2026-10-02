@@ -15,9 +15,9 @@ Los valores exactos (IP, `fah-claim`, destinos de `_acme-challenge` y de DKIM) l
 
 | Nombre | Tipo | Valor | Para qué | Valor real |
 |---|---|---|---|---|
-| `@` | A | IP de App Hosting (wizard) | servir la app | |
-| `@` | TXT | `fah-claim=<uuid>` | indicar a App Hosting qué dominio servir | |
-| `_acme-challenge…` | CNAME | destino de Certificate Manager (wizard) | emitir y renovar el certificado. **No borrar nunca** | |
+| `@` | A | IP de App Hosting (wizard) | servir la app | `35.219.200.196` |
+| `@` | TXT | `fah-claim=<uuid>` | indicar a App Hosting qué dominio servir | `fah-claim=023-02-010d0a15-9d72-4b32-83ce-0a32dab29ff0` |
+| `_acme-challenge…` | CNAME | destino de Certificate Manager (wizard) | emitir y renovar el certificado. **No borrar nunca** | `_acme-challenge_mwao6mfum7o2cik6` → `aeedaba9-5ca9-4827-82ec-f76b0ed9a972.1.authorize.certificatemanager.goog` |
 | `www` | A o CNAME (wizard) | según el wizard | redirección a `amigoinvisible.com.ar` | |
 | `_acme-challenge…www` | CNAME | según el wizard | certificado de `www` | |
 | `@` | TXT | `v=spf1 include:… ~all` (el que indique Firebase Auth) | remitente de los mails de Auth | |
