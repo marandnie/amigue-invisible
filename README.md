@@ -1,27 +1,64 @@
-# AmigueInvisible
+# Amigo Invisible
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
+App para organizar el sorteo del amigo invisible: armás el grupo, mandás los links por WhatsApp y cada quien descubre a quién le regala. Sitio: **https://amigoinvisible.com.ar** (`amigueinvisible.com.ar` redirige ahí).
 
-## Development server
+Se desarrolla con **Spec-Driven Development** usando [GitHub Spec Kit](https://github.com/github/spec-kit):
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Principios del proyecto: [`.specify/memory/constitution.md`](.specify/memory/constitution.md)
+- Features: [`specs/`](specs/). Cada una con `spec.md` → `plan.md` → `tasks.md`.
+  - [`001-plataforma-gcp-dominio`](specs/001-plataforma-gcp-dominio/): dominio, login y deploy (en curso)
+  - [`002-sorteo-amigo-invisible`](specs/002-sorteo-amigo-invisible/): grupos, invitaciones, sorteo, listas de deseos (spec)
+- Con Claude Code: `/speckit-specify`, `/speckit-clarify`, `/speckit-plan`, `/speckit-tasks`, `/speckit-implement`.
 
-## Code scaffolding
+La versión anterior en Angular quedó en el tag `legacy-angular`.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Stack
 
-## Build
+- **Next.js 15** (App Router, Server Components) + TypeScript + Tailwind
+- **Firebase App Hosting** (región `us-east4`) — build y deploy automático desde `main`
+- **Cloud Firestore** — reglas en deny-all; todo el acceso pasa por el servidor (Admin SDK)
+- **Firebase Authentication** — email + contraseña, link por mail y Google, con session cookies (`__session`)
+- **Cloudflare** como DNS (modo *DNS only*), delegado desde NIC.ar
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Desarrollo local
 
-## Running unit tests
+Requisitos: Node.js 22+, Java 21+ (para los emuladores) y `firebase-tools` (`npm i -g firebase-tools`).
+No hace falta un proyecto real de Firebase: todo corre contra los emuladores con el proyecto ficticio `demo-amigo-invisible`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+cp .env.example .env.local
+npm install
+npm run emulators      # terminal 1: Auth (9099), Firestore (8080), UI en http://localhost:4000
+npm run dev            # terminal 2: http://localhost:3000
+```
 
-## Running end-to-end tests
+En la UI de los emuladores (`http://localhost:4000` → Authentication) ves los usuarios creados y los links de acceso "enviados" por mail.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Tests
 
-## Further help
+```bash
+npm test               # unit tests (Vitest)
+npm run test:rules     # reglas de Firestore contra el emulador
+npm run build && npm run test:smoke   # flujo de sesión de punta a punta contra los emuladores
+npm run check:domains  # en producción: los 4 dominios × http/https terminan en el principal
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Deploy
+
+Cada merge a `main` despliega solo (Firebase App Hosting). Si el build falla, queda la versión anterior.
+Para volver atrás: consola de Firebase → App Hosting → backend → *Rollouts* → elegir uno anterior → *Roll back*.
+
+La configuración del backend está en [`apphosting.yaml`](apphosting.yaml). El paso a paso completo (proyecto, DNS, dominios, mails) está en [`specs/001-plataforma-gcp-dominio/quickstart.md`](specs/001-plataforma-gcp-dominio/quickstart.md).
+
+## Estructura
+
+```text
+app/                    rutas (landing, /ingresar, /registro, /mis-grupos, /api/sesion)
+components/             UI (auth/, ui/, navbar)
+lib/                    firebase (client/admin), sesión, perfil, utilidades
+tests/                  unit/, rules/, smoke/
+scripts/                check-domains.sh
+specs/                  specs de Spec Kit
+.specify/               constitución, templates y scripts de Spec Kit
+.claude/skills/         comandos /speckit-* para Claude
+```
