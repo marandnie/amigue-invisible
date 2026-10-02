@@ -4,11 +4,19 @@
 
 **Created**: 2026-09-30
 
-**Status**: Draft (con 3 puntos a aclarar)
+**Status**: Draft (aclarada el 2026-10-02)
 
 **Input**: DESIGN.md (features 1–4: crear grupo e invitar, sorteo secreto, exclusiones y listas de deseos, presupuesto y datos del evento), adaptado a la constitución v1.0.0.
 
 **Depende de**: `001-plataforma-gcp-dominio` (dominio, cuentas y sesión).
+
+## Clarifications
+
+### Session 2026-10-02
+
+- Q: ¿Se puede rehacer el sorteo una vez hecho (por ejemplo, si alguien se baja)? → A: Sí, con **arreglo mínimo**. Si alguien se baja, solo cambia la persona que le regalaba a quien se fue: pasa a regalarle a quien le tocaba a esa persona. El resto queda igual. Para sumar a alguien después del sorteo se rehace todo, avisando a todos. Solo lo hace quien organiza. → US7, FR-016, FR-026 a FR-030.
+- Q: ¿Quien organiza siempre entra en el sorteo? → A: No necesariamente. Existe la opción de solo organizar. → FR-004, US1.
+- Q: ¿Lenguaje inclusivo o tradicional? → A: Tradicional. → FR-025.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -27,6 +35,7 @@ Una persona con cuenta arma un grupo ("Navidad familia Nieto"): pone nombre, pre
 3. **Given** un grupo sin sortear, **When** la organizadora pega una lista de nombres (uno por línea, con email opcional), **Then** se crean todos los participantes de una vez y avisa si hay nombres o emails repetidos.
 4. **Given** un participante pendiente, **When** la organizadora lo saca del grupo o regenera su link, **Then** el link anterior deja de funcionar.
 5. **Given** un grupo, **When** la organizadora edita presupuesto, fecha, lugar o notas, **Then** todos los participantes ven los datos nuevos.
+6. **Given** una persona creando un grupo, **When** destilda "Yo también participo", **Then** queda como organizadora pero no entra en el sorteo ni tiene página de participante.
 
 ---
 
@@ -62,7 +71,7 @@ Cuando ya se sumaron al menos 3 personas, la organizadora toca "Hacer el sorteo"
 3. **Given** un grupo sorteado, **When** la organizadora entra a la página del grupo, **Then** ve que el sorteo se hizo y cuándo, pero no ve ninguna asignación salvo la propia (si participa).
 4. **Given** un grupo con participantes pendientes, **When** la organizadora intenta sortear, **Then** se le avisa quiénes quedan afuera y tiene que confirmar.
 5. **Given** un grupo con menos de 3 sumados, **When** se intenta sortear, **Then** la acción no está disponible y se explica por qué.
-6. **Given** un grupo sorteado, **When** alguien intenta agregar o sacar participantes, **Then** no se permite. [NEEDS CLARIFICATION: ¿se puede rehacer el sorteo una vez hecho (por ejemplo, si alguien se baja)? Si sí: ¿solo la organizadora, hasta cuándo, y se avisa a todos?]
+6. **Given** un grupo sorteado, **When** un participante intenta sumar o sacar gente, **Then** no puede. Solo la organizadora puede reacomodar (US7).
 
 ---
 
@@ -114,6 +123,24 @@ Si la organizadora cargó el email de un participante, la app le manda la invita
 
 ---
 
+### User Story 7 - Reacomodar después del sorteo (Priority: P3)
+
+Ya se hizo el sorteo y alguien se baja, o hay que sumar a una persona que se olvidaron. La organizadora puede reacomodar tocando lo mínimo posible. Nadie, ni siquiera ella, se entera de las asignaciones de otros.
+
+**Why this priority**: pasa seguido en grupos grandes, pero el sorteo funciona sin esto.
+
+**Independent Test**: con 5 participantes sorteados, dar de baja a uno y verificar que cambió exactamente una asignación, que el resultado sigue siendo válido y que solo recibió aviso la persona afectada.
+
+**Acceptance Scenarios**:
+
+1. **Given** un grupo sorteado donde A le regala a X y X le regala a B, **When** la organizadora da de baja a X, **Then** A pasa a regalarle a B, el resto de las asignaciones no cambia y solo A recibe el aviso de que cambió su persona.
+2. **Given** que el arreglo mínimo no es posible (A le regala a X y X le regala a A, o A tiene excluida a B), **When** la organizadora da de baja a X, **Then** se le ofrece rehacer todo el sorteo y, si confirma, se sortea de nuevo y se avisa a todos.
+3. **Given** un grupo sorteado, **When** la organizadora suma a una persona nueva, **Then** se le avisa que hay que rehacer todo el sorteo. Si confirma y la persona ya se sumó, se sortea de nuevo y se avisa a todos.
+4. **Given** un reacomodo, **When** la organizadora mira el grupo, **Then** ve que se reacomodó y cuándo, pero no a quién le cambió la asignación.
+5. **Given** un grupo sorteado de 3 personas, **When** se baja una, **Then** el sorteo se anula, el grupo vuelve a "sin sortear" y se avisa a quienes quedan.
+
+---
+
 ### Edge Cases
 
 - Dos personas con el mismo nombre en un grupo: se distinguen (por ejemplo, con la inicial del email o un apodo).
@@ -124,6 +151,9 @@ Si la organizadora cargó el email de un participante, la app le manda la invita
 - Grupo de 50 personas con muchas exclusiones: el sorteo responde en segundos o explica por qué no puede.
 - Una persona participa en varios grupos: "Mis grupos" los muestra separados por "organizo" y "participo".
 - Se borra el grupo: desaparecen sus participantes, listas, exclusiones y asignaciones.
+- Se baja alguien de un par recíproco (A↔X): el arreglo mínimo dejaría a A regalándose a sí mismo, así que se ofrece rehacer todo.
+- Quien organiza no participa: los mínimos de 3 personas y todos los conteos son sobre participantes, sin contarla a ella.
+- Se baja quien organiza: no se puede (ver arriba); primero borra el grupo.
 - Link de lista de deseos malicioso (`javascript:`): se rechaza.
 
 ## Requirements *(mandatory)*
@@ -135,7 +165,7 @@ Si la organizadora cargó el email de un participante, la app le manda la invita
 - **FR-001**: Una persona con cuenta MUST poder crear un grupo con nombre (obligatorio), presupuesto, moneda (ARS por defecto), fecha y hora del evento, lugar y notas (opcionales). Quien lo crea queda como organizadora.
 - **FR-002**: La organizadora MUST poder editar los datos del grupo en cualquier momento y borrar el grupo entero.
 - **FR-003**: "Mis grupos" MUST listar los grupos que la persona organiza y en los que participa, y las invitaciones pendientes asociadas a su email.
-- **FR-004**: La participación de la organizadora en el sorteo MUST ser [NEEDS CLARIFICATION: ¿la organizadora siempre entra en el sorteo o puede elegir solo organizar (por ejemplo, una mamá que arma el sorteo de los chicos)?]
+- **FR-004**: Quien organiza MUST poder elegir si participa del sorteo o solo organiza ("Yo también participo", tildado por defecto). Puede cambiarlo hasta el sorteo. Si no participa, no tiene página de participante, no recibe ni da regalo y, como todos, no ve asignaciones ajenas.
 
 **Participantes e invitaciones**
 
@@ -153,7 +183,7 @@ Si la organizadora cargó el email de un participante, la app le manda la invita
 - **FR-013**: El sorteo MUST ser atómico: se completa entero o no ocurre, y MUST ocurrir una sola vez aunque se pida en paralelo.
 - **FR-014**: Cada participante MUST poder ver solo su propia asignación. Ninguna persona (incluida la organizadora) MUST poder ver asignaciones ajenas por la interfaz, por URL ni accediendo a los datos directamente.
 - **FR-015**: Las asignaciones MUST NOT aparecer en logs, mensajes de error, mails ni analytics.
-- **FR-016**: Después del sorteo, el grupo MUST quedar cerrado para altas y bajas de participantes (ver la aclaración de US3).
+- **FR-016**: Después del sorteo, el grupo MUST quedar cerrado para altas y bajas, salvo a través del reacomodo que hace quien organiza (FR-026 a FR-030).
 - **FR-017**: Participantes pendientes al momento de sortear MUST quedar fuera del sorteo, previo aviso y confirmación de la organizadora.
 
 **Listas de deseos**
@@ -166,6 +196,14 @@ Si la organizadora cargó el email de un participante, la app le manda la invita
 - **FR-020**: La organizadora MUST poder crear y quitar exclusiones entre participantes antes del sorteo; mutuas por defecto, con opción de que sean en un solo sentido.
 - **FR-021**: Las exclusiones MUST ser visibles solo para la organizadora.
 
+**Reacomodo después del sorteo**
+
+- **FR-026**: Quien organiza MUST poder dar de baja a un participante de un grupo sorteado. El sistema MUST reasignar solo a quien le regalaba a esa persona, dándole el receptor de quien se va, siempre que el resultado cumpla FR-011 (nadie se regala a sí mismo y se respetan las exclusiones).
+- **FR-027**: Si el arreglo mínimo no cumple FR-011, el sistema MUST ofrecer rehacer el sorteo completo y hacerlo solo con confirmación explícita.
+- **FR-028**: Sumar un participante a un grupo sorteado MUST requerir rehacer el sorteo completo, con confirmación explícita, una vez que la persona nueva se haya sumado.
+- **FR-029**: Al reacomodar, el sistema MUST avisar (en la app y por mail si hay email) solo a las personas cuya asignación cambió, sin revelarle a quien organiza quiénes son. Al rehacer todo, MUST avisar a todos.
+- **FR-030**: Si después de una baja quedan menos de 3 participantes, el sorteo MUST anularse y el grupo MUST volver a "sin sortear", avisando a quienes quedan.
+
 **Avisos**
 
 - **FR-022**: Si el participante tiene email, el sistema MUST mandarle la invitación por mail al agregarlo (y al regenerar el link, si la organizadora lo pide).
@@ -174,12 +212,12 @@ Si la organizadora cargó el email de un participante, la app le manda la invita
 
 **Lenguaje**
 
-- **FR-025**: Los textos de la interfaz MUST usar [NEEDS CLARIFICATION: ¿lenguaje inclusivo ("amigue invisible", "invitades", "sumade") o la forma tradicional ("amigo invisible", "invitados")? El dominio `amigueinvisible.com.ar` sugiere lo primero, pero la marca principal es "Amigo Invisible"].
+- **FR-025**: Los textos de la interfaz y de los mails MUST usar el español tradicional ("amigo invisible", "invitados", "el organizador"). El dominio `amigueinvisible.com.ar` solo redirige al principal.
 
 ### Key Entities
 
 - **Persona usuaria**: quien tiene cuenta (definida en la 001). Puede organizar grupos y participar en varios.
-- **Grupo**: un sorteo. Nombre, organizadora, presupuesto, moneda, fecha y lugar del evento, notas, fecha del sorteo (vacía hasta que se hace).
+- **Grupo**: un sorteo. Nombre, organizadora, si la organizadora participa, presupuesto, moneda, fecha y lugar del evento, notas, fecha del sorteo (vacía hasta que se hace) y fecha del último reacomodo.
 - **Participante**: una persona dentro de un grupo. Nombre con el que la cargaron, email opcional, cuenta vinculada (vacía hasta que se suma), fecha en que se sumó.
 - **Invitación**: link personal de un participante. Token no adivinable, vencimiento, uso, revocación.
 - **Ítem de lista de deseos**: texto y link opcional, de un participante.
@@ -196,6 +234,7 @@ Si la organizadora cargó el email de un participante, la app le manda la invita
 - **SC-004**: En pruebas automatizadas, ningún participante ni la organizadora logra leer una asignación ajena por ningún camino (interfaz, URL o acceso directo a los datos).
 - **SC-005**: Un sorteo de 50 participantes con exclusiones se resuelve en menos de 3 segundos.
 - **SC-006**: En la primera temporada, al menos el 90 % de los participantes invitados se suma antes de la fecha del sorteo.
+- **SC-007**: En pruebas automatizadas de bajas sobre sorteos aleatorios, cuando el arreglo mínimo es posible cambia exactamente una asignación y el resultado sigue cumpliendo FR-011. Cuando no es posible, siempre se ofrece rehacer todo.
 
 ## Assumptions
 
@@ -204,5 +243,6 @@ Si la organizadora cargó el email de un participante, la app le manda la invita
 - El presupuesto es informativo; no hay pagos ni cálculos.
 - Se muestra la hora del evento en horario de Argentina.
 - Los datos del grupo se conservan hasta que la organizadora lo borra; la limpieza automática queda fuera de v1.
+- Con el arreglo mínimo, la persona reasignada puede deducir a quién le regalaba quien se bajó. Como esa persona ya no participa, se acepta.
 - Fuera de alcance en v1: chat o preguntas anónimas entre quien regala y quien recibe, confirmar "regalo recibido", transferir la organización, varios sorteos por grupo, recordatorios automáticos.
 - El proveedor de mails transaccionales se elige en el plan (ver research R9 de la feature 001).
