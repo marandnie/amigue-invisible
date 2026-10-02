@@ -11,7 +11,8 @@
     "test": "vitest run tests/unit",
     "test:rules": "firebase emulators:exec --only firestore --project demo-amigo-invisible \"vitest run tests/rules\"",
     "check:domains": "bash scripts/check-domains.sh",
-    "test:smoke": "firebase emulators:exec --only auth,firestore --project demo-amigo-invisible \"bash tests/smoke/session.sh\""
+    "test:smoke": "firebase emulators:exec --only auth,firestore --project demo-amigo-invisible \"bash tests/smoke/session.sh\"",
+    "test:integration": "firebase emulators:exec --only auth,firestore --project demo-amigo-invisible \"vitest run tests/integration\""
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
