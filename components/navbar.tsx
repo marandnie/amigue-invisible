@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import { getSessionUser } from "@/lib/session";
 
 export async function Navbar() {
@@ -23,14 +24,8 @@ export async function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/ingresar">
-                <Button variant="ghost" size="sm">
-                  Ingresar
-                </Button>
-              </Link>
-              <Link href="/registro">
-                <Button size="sm">Crear cuenta</Button>
-              </Link>
+              <ButtonLink href="/ingresar" variant="ghost" size="sm">Ingresar</ButtonLink>
+              <ButtonLink href="/registro" size="sm">Crear cuenta</ButtonLink>
             </>
           )}
         </nav>

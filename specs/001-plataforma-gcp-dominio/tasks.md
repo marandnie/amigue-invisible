@@ -63,7 +63,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 - [x] T019 [P] [US1] Crear `app/not-found.tsx` en español con link al inicio
 - [x] T020 [P] [US1] Imagen Open Graph generada en el build (`app/opengraph-image.tsx`, 1200×630) e ícono `app/icon.svg`
 - [x] T021 [US1] Crear el backend de App Hosting en `us-east4` conectado a GitHub `main` con rollouts automáticos (quickstart §4) y verificar la URL `*.hosted.app`
-- [ ] T022 [US1] 🖐️ Conectar `amigoinvisible.com.ar` en App Hosting, cargar los registros en Cloudflare en *DNS only* y esperar *Connected* (quickstart §5). Completar "Valor real" en `contracts/dns-records.md`
+- [x] T022 [US1] 🖐️ Conectar `amigoinvisible.com.ar` en App Hosting, cargar los registros en Cloudflare en *DNS only* y esperar *Connected* (quickstart §5). Completar "Valor real" en `contracts/dns-records.md`
 - [ ] T023 [US1] Validar US1 con el quickstart §7
 
 **Checkpoint**: la app está en su dominio. Ya se puede compartir el link
@@ -77,9 +77,9 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 **Independent Test**: `./scripts/check-domains.sh`
 
 - [x] T024 [P] [US2] Escribir `scripts/check-domains.sh`: para las 8 URLs con `/prueba?x=1`, seguir las redirecciones con `curl -sIL`, contar saltos y validar la URL final y el certificado. Sale con código ≠ 0 si alguna falla
-- [ ] T025 [US2] 🖐️ Agregar `www.amigoinvisible.com.ar` con redirección al principal y cargar sus registros en Cloudflare
-- [ ] T026 [US2] 🖐️ Agregar `amigueinvisible.com.ar` y `www.amigueinvisible.com.ar` con redirección al principal; cargar registros, SPF `-all` y DMARC `reject` en su zona
-- [ ] T027 [US2] Correr `scripts/check-domains.sh`; si la redirección pierde la ruta, aplicar el plan B de research R7 y documentarlo en `contracts/dns-records.md`
+- [x] T025 [US2] 🖐️ Agregar `www.amigoinvisible.com.ar` con redirección al principal y cargar sus registros en Cloudflare
+- [x] T026 [US2] 🖐️ Agregar `amigueinvisible.com.ar` y `www.amigueinvisible.com.ar` con redirección al principal; cargar registros, SPF `-all` y DMARC `reject` en su zona
+- [x] T027 [US2] *(2026-10-02: las 8 URLs OK; App Hosting redirige con 302, no 301 → ver T053)* Correr `scripts/check-domains.sh`; si la redirección pierde la ruta, aplicar el plan B de research R7 y documentarlo en `contracts/dns-records.md`
 
 **Checkpoint**: los cuatro nombres funcionan
 
@@ -137,6 +137,8 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 ---
 
 ## Phase 8: Polish
+
+- [ ] T053 [US2] FR-002 pide redirección permanente (301/308) y App Hosting responde 302. Decidir si alcanza o aplicar el plan B de research R7 (Redirect Rule de Cloudflare con 301) para `www` y `amigueinvisible.com.ar`
 
 - [x] T049 [P] Reescribir `README.md`: stack Firebase, desarrollo con emuladores, deploy, DNS y rollback. Marcar como obsoletas las secciones de stack y deploy de `DESIGN.md` (con un aviso arriba del documento, sin borrar su contenido)
 - [x] T050 [P] Crear `CLAUDE.md` con punteros a la constitución, `specs/` y comandos (`npm run dev`, `npm run test:rules`, emuladores)
