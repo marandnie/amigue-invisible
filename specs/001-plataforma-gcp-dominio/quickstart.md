@@ -21,11 +21,13 @@ npm run build && npm run test:smoke   # sesión de punta a punta contra los emul
 
 ## 2. Proyecto de Firebase 🖐️
 
-1. Crear el proyecto `amigo-invisible` en la consola de Firebase y pasarlo a **Blaze**.
+1. Crear el proyecto en la consola de Firebase (creado: **`amigue-invisible-604df`**) y pasarlo a **Blaze**. Si da error de cuota de facturación, ver la nota al final de esta sección.
 2. Presupuesto de **USD 5/mes** con alertas al 50/90/100 % a tu mail (Google Cloud → Facturación → Presupuestos y alertas).
 3. Crear Firestore: edición Standard, modo nativo, ubicación **`us-east4`** (irreversible, ver research R2).
-4. `firebase use amigo-invisible && firebase deploy --only firestore:rules,firestore:indexes`.
+4. `firebase deploy --only firestore:rules,firestore:indexes` (el proyecto ya está en `.firebaserc`).
 5. Authentication → habilitar Email/Contraseña (con *Email link*) y Google; política de contraseña mín. 10; plantillas en español.
+
+> **Cuota de proyectos por cuenta de facturación**: si al pasar a Blaze aparece que la cuenta de facturación llegó a su límite de proyectos, hay tres salidas: (a) desvincular la facturación de un proyecto que no la necesite (Google Cloud → Facturación → *Administración de cuentas* lista los proyectos vinculados); (b) pedir más cupo con el formulario https://support.google.com/code/contact/billing_quota_increase (Google responde en ~2 días hábiles); (c) usar otra cuenta de facturación.
 
 ## 3. DNS: Cloudflare + NIC.ar 🖐️
 
@@ -43,11 +45,10 @@ dig +short NS amigueinvisible.com.ar
 ## 4. Backend de App Hosting
 
 ```bash
-firebase apphosting:backends:create --project amigo-invisible
+firebase apphosting:backends:create --project amigue-invisible-604df
 # región: us-east4 · repo: GitHub marandnie/amigue-invisible · directorio raíz: / · rama: main · rollouts automáticos: sí
 ```
 
-Si el ID `amigo-invisible` ya estaba tomado y Firebase te dio otro, actualizalo en `.firebaserc`.
 
 Esperar el primer rollout y abrir la URL `https://<backend>--amigo-invisible.us-east4.hosted.app`.
 
