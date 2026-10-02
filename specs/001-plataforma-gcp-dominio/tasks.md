@@ -27,7 +27,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 - [x] T001 Usar el repo `marandnie/amigue-invisible`: la versión Angular queda en el tag `legacy-angular`; rama `001-plataforma-gcp-dominio` con el scaffold Next.js (commit original del `git-repo.tar.gz`)
 - [x] T002 Commitear Spec Kit (`.specify/`, `.claude/skills/`, `specs/`) en la rama
 - [ ] T003 🖐️ Push de la rama `001-plataforma-gcp-dominio` y del tag `legacy-angular`; PR a `main`; desactivar GitHub Pages en el repo (tenía `CNAME` = amigueinvisible.com.ar)
-- [ ] T004 [P] 🖐️ Crear el proyecto Firebase `amigo-invisible`, pasarlo a Blaze y crear el presupuesto de USD 5/mes con alertas 50/90/100 % (quickstart §2.1–2.2)
+- [ ] T004 [P] 🖐️ Crear el proyecto Firebase (`amigue-invisible-604df`, creado), pasarlo a Blaze y crear el presupuesto de USD 5/mes con alertas 50/90/100 % (quickstart §2.1–2.2)
 - [x] T005 [P] 🖐️ Crear en Cloudflare las zonas `amigoinvisible.com.ar` y `amigueinvisible.com.ar` (plan Free) y anotar los nameservers en `contracts/dns-records.md`
 - [ ] T006 🖐️ Delegar ambos dominios en nic.ar a los nameservers de Cloudflare y verificar con `dig +short NS` (depende de T005)
 

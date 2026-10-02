@@ -50,7 +50,7 @@ firebase apphosting:backends:create --project amigue-invisible-604df
 ```
 
 
-Esperar el primer rollout y abrir la URL `https://<backend>--amigo-invisible.us-east4.hosted.app`.
+Esperar el primer rollout y abrir la URL `https://<backend>--amigue-invisible-604df.us-east4.hosted.app`.
 
 ## 5. Dominios en App Hosting 🖐️
 
