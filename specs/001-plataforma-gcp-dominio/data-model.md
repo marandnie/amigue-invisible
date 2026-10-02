@@ -11,7 +11,7 @@ Firestore (modo nativo). En esta feature solo existe la colección de perfiles. 
 | `displayName` | string | 1–60 caracteres; al crearse se toma de Google o de la parte local del email |
 | `email` | string | minúsculas; igual al email de Auth |
 | `emailVerified` | boolean | copia del estado en Auth, se actualiza en cada login |
-| `providers` | string[] | `password`, `emailLink`, `google.com` |
+| `providers` | string[] | ids de proveedor de Auth: `password` (incluye el link por mail) y/o `google.com` |
 | `createdAt` | timestamp | lo pone el servidor en el alta |
 | `lastLoginAt` | timestamp | lo pone el servidor en cada `POST /api/sesion` |
 

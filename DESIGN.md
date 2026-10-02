@@ -1,3 +1,5 @@
+> **Nota (oct 2026):** este documento sigue siendo la referencia de producto (modelo de datos, rutas, features), pero las secciones **"Recommended stack"** y **"Deployment (AWS)"** quedaron obsoletas. El stack vigente es Firebase (App Hosting + Firestore + Auth): ver [`.specify/memory/constitution.md`](.specify/memory/constitution.md) y [`specs/`](specs/). Las specs mandan sobre este documento.
+
 # Amigo Invisible — Design Doc
 
 A web app for running "amigo invisible" (secret santa) draws: a host creates a group, invites people (who sign in to accept), the app randomly assigns each person a giftee while respecting exclusions, and each participant gets a private page with their assignment, wishlists, and event details.

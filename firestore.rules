@@ -1,0 +1,12 @@
+rules_version = '2';
+
+// Constitución, principio I: nadie lee ni escribe Firestore directo desde el navegador.
+// Todo el acceso pasa por el servidor (Admin SDK), que aplica la autorización.
+// Si alguna vez se abre una colección, se hace acá, de forma explícita y con tests.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

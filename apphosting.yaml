@@ -1,0 +1,21 @@
+# Configuración del backend de Firebase App Hosting.
+# https://firebase.google.com/docs/app-hosting/configure
+#
+# La config web de Firebase (apiKey, projectId, …) la inyecta App Hosting en el build
+# (FIREBASE_WEBAPP_CONFIG), así que no hace falta declararla acá.
+# Los secretos, si aparecen, van con `firebase apphosting:secrets:set` y se referencian con `secret:`.
+
+runConfig:
+  # Constitución III: costo cero en reposo y techo de instancias.
+  minInstances: 0
+  maxInstances: 3
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
+
+env:
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: https://amigoinvisible.com.ar
+    availability:
+      - BUILD
+      - RUNTIME

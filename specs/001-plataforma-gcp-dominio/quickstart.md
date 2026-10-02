@@ -4,18 +4,19 @@ Runbook para dejar la app en `amigoinvisible.com.ar` y checklist de validación 
 
 ## 0. Requisitos
 
-- Node.js 22, `firebase-tools` actualizado (`npm i -g firebase-tools`), cuenta de GitHub.
+- Node.js 22, Java 21+ (emuladores), `firebase-tools` actualizado (`npm i -g firebase-tools`), cuenta de GitHub.
 - Acceso a nic.ar con Clave Fiscal (nivel 2 o más) 🖐️.
 - Cuenta de Cloudflare 🖐️.
 
 ## 1. Desarrollo local
 
 ```bash
-cp .env.example .env.local        # NEXT_PUBLIC_USE_EMULATORS=true
+cp .env.example .env.local        # proyecto demo + NEXT_PUBLIC_USE_EMULATORS=true
 npm install
-firebase emulators:start --only auth,firestore   # terminal 1
-npm run dev                                      # terminal 2 → http://localhost:3000
-npm run test:rules                               # tests de reglas contra el emulador
+npm run emulators                 # terminal 1 (UI en http://localhost:4000)
+npm run dev                       # terminal 2 → http://localhost:3000
+npm test && npm run test:rules    # unit + reglas
+npm run build && npm run test:smoke   # sesión de punta a punta contra los emuladores
 ```
 
 ## 2. Proyecto de Firebase 🖐️
@@ -43,8 +44,10 @@ dig +short NS amigueinvisible.com.ar
 
 ```bash
 firebase apphosting:backends:create --project amigo-invisible
-# región: us-east4 · repo: GitHub <usuario>/amigo-invisible · rama: main · rollouts automáticos: sí
+# región: us-east4 · repo: GitHub marandnie/amigue-invisible · directorio raíz: / · rama: main · rollouts automáticos: sí
 ```
+
+Si el ID `amigo-invisible` ya estaba tomado y Firebase te dio otro, actualizalo en `.firebaserc`.
 
 Esperar el primer rollout y abrir la URL `https://<backend>--amigo-invisible.us-east4.hosted.app`.
 

@@ -16,7 +16,7 @@ Publicar el scaffold Next.js en `https://amigoinvisible.com.ar` sobre Firebase, 
 
 **Storage**: Cloud Firestore (Standard, modo nativo, `us-east4`). En esta feature solo existe la colección `users` ([data-model.md](./data-model.md)).
 
-**Testing**: Vitest + `@firebase/rules-unit-testing` contra el emulador de Firestore (reglas). `scripts/check-domains.sh` (curl) para dominios y redirecciones. Validación manual con [quickstart.md](./quickstart.md).
+**Testing**: Vitest (unit) + `@firebase/rules-unit-testing` contra el emulador de Firestore (reglas). `tests/smoke/session.sh`: flujo de sesión de punta a punta contra los emuladores de Auth y Firestore. `scripts/check-domains.sh` (curl) para dominios y redirecciones. Validación manual con [quickstart.md](./quickstart.md). Los emuladores requieren Java 21+.
 
 **Target Platform**: Firebase App Hosting (Cloud Run gestionado + Cloud CDN), región `us-east4`. Navegadores mobile modernos (Chrome Android, Safari iOS) y desktop.
 
@@ -61,10 +61,10 @@ amigueinvisible.com.ar, www.* ──▶ App Hosting (redirect 301) ──▶ htt
   - Públicas: `/`, `/ingresar`, `/ingresar/link`, `/registro`
   - Privadas: `/mis-grupos`
   - API: `POST/DELETE /api/sesion` ([contracts/session-api.md](./contracts/session-api.md))
-- **Rutas privadas futuras** que el middleware ya protege: `/grupos/*`, `/ajustes`.
+- **Protección de rutas privadas**: cada página llama a `requireUser(ruta)` (`lib/session.ts`). No hay middleware (ver research R5).
 - **Perfil**: `POST /api/sesion` hace *upsert* de `users/{uid}` (nombre, email, fechas) con el Admin SDK.
-- **Config pública** del SDK web: variables `NEXT_PUBLIC_FIREBASE_*` en `apphosting.yaml` (no es secreta). En esta feature no hacen falta secretos: el Admin SDK usa las credenciales por defecto de App Hosting.
-- **Desarrollo local**: `firebase emulators:start` (Auth + Firestore). La app detecta `NEXT_PUBLIC_USE_EMULATORS=true`.
+- **Config pública** del SDK web: en App Hosting llega sola en el build (`FIREBASE_WEBAPP_CONFIG`) y `initializeApp()` la toma sin argumentos. En dev se usan las variables `NEXT_PUBLIC_FIREBASE_*` de `.env.local`. En esta feature no hacen falta secretos: el Admin SDK usa las credenciales por defecto de App Hosting.
+- **Desarrollo local**: `npm run emulators` (Auth + Firestore, proyecto ficticio `demo-amigo-invisible`). La app detecta `NEXT_PUBLIC_USE_EMULATORS=true`.
 
 ## Project Structure
 
@@ -91,6 +91,8 @@ app/
 ├── layout.tsx                 # es-AR, metadata + Open Graph para vista previa en WhatsApp
 ├── page.tsx                   # landing
 ├── not-found.tsx              # 404 en español
+├── opengraph-image.tsx        # imagen de vista previa generada en el build
+├── icon.svg
 ├── ingresar/page.tsx          # login: contraseña, link por mail, Google
 ├── ingresar/link/page.tsx     # completa el login por link
 ├── registro/page.tsx
@@ -101,21 +103,26 @@ components/
 ├── auth/                      # formularios cliente (login, registro, Google, aviso navegador embebido)
 └── ui/                        # button, card, input (existentes)
 lib/
-├── firebase/client.ts         # SDK web (+ emuladores en dev)
+├── firebase/client.ts         # SDK web, persistencia en memoria (+ emuladores en dev)
 ├── firebase/admin.ts          # Admin SDK (ADC)
 ├── session.ts                 # getSessionUser(), requireUser()
+├── profile.ts                 # upsert/lectura de users/{uid}
+├── client-session.ts          # ID token → POST /api/sesion
+├── auth-errors.ts             # mensajes de error en español
+├── safe-next.ts               # evita redirecciones abiertas
 └── utils.ts
-middleware.ts                  # chequeo optimista de __session en rutas privadas
 firestore.rules                # deny-all
 firestore.indexes.json
 firebase.json                  # emuladores + reglas
 .firebaserc
 apphosting.yaml                # runConfig + env públicas
 scripts/check-domains.sh
+tests/unit/safe-next.test.ts
 tests/rules/firestore.rules.test.ts
+tests/smoke/session.sh
 ```
 
-**Se eliminan** (quedan en el historial de git): `prisma/`, `lib/prisma.ts`, `lib/auth.ts`, `app/api/auth/`, `types/next-auth.d.ts`, `amplify.yml`, `app/login`, `app/signup`, `app/dashboard`, `app/groups/`, `app/invitations/`. Las páginas de grupos e invitaciones se rehacen sobre Firestore en la feature 002.
+**Se eliminan** (quedan en el historial de git): `prisma/`, `lib/prisma.ts`, `lib/auth.ts`, `app/api/auth/`, `types/next-auth.d.ts`, `amplify.yml`, `middleware.ts`, `app/login`, `app/signup`, `app/dashboard`, `app/groups/`, `app/invitations/`. Las páginas de grupos e invitaciones se rehacen sobre Firestore en la feature 002.
 
 **Structure Decision**: monolito Next.js en la raíz del repo, como ya estaba el scaffold. No se separa frontend y backend.
 
@@ -134,10 +141,6 @@ env:
   - variable: NEXT_PUBLIC_SITE_URL
     value: https://amigoinvisible.com.ar
     availability: [BUILD, RUNTIME]
-  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: <config web>
-    availability: [BUILD, RUNTIME]
-  # … resto de NEXT_PUBLIC_FIREBASE_* (authDomain, projectId, appId)
 ```
 
 Firebase Auth (consola):

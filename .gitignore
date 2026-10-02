@@ -38,9 +38,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# prisma
-prisma/migrations/dev/
-
 # IDE
 .vscode/
 .idea/
+
+# firebase
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# spec kit (estado local)
+.specify/feature.json

@@ -17,7 +17,7 @@ Crea la sesión del servidor a partir de un login hecho en el cliente.
 1. El body cumple el esquema (zod) → si no, `400`.
 2. `verifyIdToken(idToken)` válido → si no, `401`.
 3. `auth_time` hace menos de 5 minutos (login reciente) → si no, `401` con `{"error":"login_viejo"}`.
-4. El chequeo CSRF pasa: el header `Origin` es el sitio (`NEXT_PUBLIC_SITE_URL` o `localhost` en dev) → si no, `403`.
+4. El chequeo CSRF pasa: el host del header `Origin` es igual al host del pedido (`X-Forwarded-Host` o `Host`) → si no, `403`. Así funciona igual en `localhost`, en `*.hosted.app` y en el dominio propio.
 
 **Efectos**
 
@@ -37,7 +37,8 @@ Cierra la sesión.
 
 **Efectos**
 
-- Si hay una `__session` válida: `revokeRefreshTokens(uid)`.
+- Requiere el mismo chequeo de `Origin` que `POST`.
+- Si hay una `__session` válida: `revokeRefreshTokens(uid)`. Firebase no permite revocar una cookie suelta, así que **salir cierra la sesión en todos los dispositivos** de la persona.
 - `Set-Cookie: __session=; Path=/; Max-Age=0`.
 
 **Response `200`**: `{ "ok": true }`, haya o no sesión (idempotente).
@@ -46,5 +47,5 @@ Cierra la sesión.
 
 - `lib/session.ts` → `getSessionUser()` devuelve `{ uid, email, displayName } | null` usando `verifySessionCookie(cookie, true)`.
 - `requireUser(nextPath)` redirige a `/ingresar?next=<nextPath>` si no hay sesión.
-- `middleware.ts` solo mira si existe la cookie `__session` en `/mis-grupos`, `/grupos/*` y `/ajustes`, y si no existe redirige a `/ingresar?next=…`. Nunca se usa como autorización.
+- No hay `middleware.ts`: cada página privada llama a `requireUser()`.
 - `next` solo acepta rutas relativas internas (empiezan con `/` y no con `//`), para evitar redirecciones abiertas.
