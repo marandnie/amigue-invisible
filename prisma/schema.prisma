@@ -1,0 +1,162 @@
+// Prisma schema for Amigo Invisible.
+// See DESIGN.md for the full data model rationale.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Auth.js tables (required by @auth/prisma-adapter) ---
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// --- Application entities ---
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  // Only set when the user signed up with email + password.
+  passwordHash  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts     Account[]
+  sessions     Session[]
+  hostedGroups Group[]       @relation("GroupHost")
+  participants Participant[]
+}
+
+model Group {
+  id            String    @id @default(cuid())
+  name          String
+  hostUserId    String
+  host          User      @relation("GroupHost", fields: [hostUserId], references: [id])
+  budget        Decimal?  @db.Decimal(10, 2)
+  currency      String    @default("EUR")
+  eventDate     DateTime?
+  eventLocation String?
+  notes         String?
+  drawnAt       DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  participants Participant[]
+  exclusions   Exclusion[]
+  assignments  Assignment[]
+
+  @@index([hostUserId])
+}
+
+model Participant {
+  id           String    @id @default(cuid())
+  groupId      String
+  group        Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  // Filled in once the invitee signs in and accepts.
+  userId       String?
+  user         User?     @relation(fields: [userId], references: [id])
+  invitedName  String
+  invitedEmail String
+  joinedAt     DateTime?
+  createdAt    DateTime  @default(now())
+
+  invitations           Invitation[]
+  wishlistItems         WishlistItem[]
+  exclusionsFrom        Exclusion[]    @relation("ExclusionFrom")
+  exclusionsTo          Exclusion[]    @relation("ExclusionTo")
+  assignmentAsGiver     Assignment?    @relation("AssignmentGiver")
+  assignmentsAsReceiver Assignment[]   @relation("AssignmentReceiver")
+
+  @@unique([groupId, invitedEmail])
+  @@unique([groupId, userId])
+  @@index([groupId])
+  @@index([userId])
+}
+
+model Invitation {
+  id            String      @id @default(cuid())
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  token         String      @unique
+  expiresAt     DateTime
+  acceptedAt    DateTime?
+  createdAt     DateTime    @default(now())
+
+  @@index([participantId])
+}
+
+model WishlistItem {
+  id            String      @id @default(cuid())
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  text          String
+  url           String?
+  createdAt     DateTime    @default(now())
+
+  @@index([participantId])
+}
+
+model Exclusion {
+  id                String      @id @default(cuid())
+  groupId           String
+  group             Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  fromParticipantId String
+  fromParticipant   Participant @relation("ExclusionFrom", fields: [fromParticipantId], references: [id], onDelete: Cascade)
+  toParticipantId   String
+  toParticipant     Participant @relation("ExclusionTo", fields: [toParticipantId], references: [id], onDelete: Cascade)
+
+  @@unique([fromParticipantId, toParticipantId])
+  @@index([groupId])
+}
+
+model Assignment {
+  id         String      @id @default(cuid())
+  groupId    String
+  group      Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  // Each giver appears exactly once per draw, so giverId is unique.
+  giverId    String      @unique
+  giver      Participant @relation("AssignmentGiver", fields: [giverId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   Participant @relation("AssignmentReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  createdAt  DateTime    @default(now())
+
+  @@index([groupId])
+  @@index([receiverId])
+}
