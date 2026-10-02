@@ -7,6 +7,8 @@ npm run emulators            # terminal 1
 npm run dev                  # terminal 2
 npm test                     # algoritmo de sorteo (incluye 10.000 sorteos aleatorios)
 npm run test:integration     # capa de datos contra los emuladores (privacidad, sorteo único, invitaciones)
+npm run build && npm start   # y en otra terminal:
+npm run test:e2e             # flujo completo en un navegador real con 4 cuentas
 ```
 
 ## Validación manual (producción o local)

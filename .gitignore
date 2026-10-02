@@ -50,3 +50,6 @@ ui-debug.log*
 
 # spec kit (estado local)
 .specify/feature.json
+
+# resultados de tests
+test-results/

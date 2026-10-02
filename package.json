@@ -12,7 +12,8 @@
     "test:rules": "firebase emulators:exec --only firestore --project demo-amigo-invisible \"vitest run tests/rules\"",
     "check:domains": "bash scripts/check-domains.sh",
     "test:smoke": "firebase emulators:exec --only auth,firestore --project demo-amigo-invisible \"bash tests/smoke/session.sh\"",
-    "test:integration": "firebase emulators:exec --only auth,firestore --project demo-amigo-invisible \"vitest run tests/integration\""
+    "test:integration": "firebase emulators:exec --only auth,firestore --project demo-amigo-invisible \"vitest run tests/integration\"",
+    "test:e2e": "node tests/e2e/flujo-sorteo.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
@@ -33,6 +34,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.19",
+    "playwright-core": "1.56",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.5.0",

@@ -6,8 +6,8 @@ Se desarrolla con **Spec-Driven Development** usando [GitHub Spec Kit](https://g
 
 - Principios del proyecto: [`.specify/memory/constitution.md`](.specify/memory/constitution.md)
 - Features: [`specs/`](specs/). Cada una con `spec.md` → `plan.md` → `tasks.md`.
-  - [`001-plataforma-gcp-dominio`](specs/001-plataforma-gcp-dominio/): dominio, login y deploy (en curso)
-  - [`002-sorteo-amigo-invisible`](specs/002-sorteo-amigo-invisible/): grupos, invitaciones, sorteo, listas de deseos (spec)
+  - [`001-plataforma-gcp-dominio`](specs/001-plataforma-gcp-dominio/): dominio, login y deploy
+  - [`002-sorteo-amigo-invisible`](specs/002-sorteo-amigo-invisible/): grupos, invitaciones, sorteo, listas de deseos y exclusiones
 - Con Claude Code: `/speckit-specify`, `/speckit-clarify`, `/speckit-plan`, `/speckit-tasks`, `/speckit-implement`.
 
 La versión anterior en Angular quedó en el tag `legacy-angular`.
@@ -37,10 +37,20 @@ En la UI de los emuladores (`http://localhost:4000` → Authentication) ves los 
 ## Tests
 
 ```bash
-npm test               # unit tests (Vitest)
-npm run test:rules     # reglas de Firestore contra el emulador
+npm test                  # unit tests (algoritmo de sorteo con 10.000 sorteos aleatorios, schemas)
+npm run test:rules        # reglas de Firestore contra el emulador
+npm run test:integration  # capa de datos contra los emuladores (privacidad, sorteo único, invitaciones)
 npm run build && npm run test:smoke   # flujo de sesión de punta a punta contra los emuladores
-npm run check:domains  # en producción: los 4 dominios × http/https terminan en el principal
+npm run check:domains     # en producción: los 4 dominios × http/https terminan en el principal
+```
+
+Prueba en navegador real (registro, grupo, invitaciones, exclusiones, sorteo y revelación con 4 cuentas):
+
+```bash
+npm run emulators                   # terminal 1
+npm run build && npm start          # terminal 2 (con .env.local)
+npx playwright install chromium     # una vez
+npm run test:e2e                    # terminal 3; capturas en test-results/e2e/
 ```
 
 ## Deploy
@@ -53,10 +63,12 @@ La configuración del backend está en [`apphosting.yaml`](apphosting.yaml). El 
 ## Estructura
 
 ```text
-app/                    rutas (landing, /ingresar, /registro, /mis-grupos, /api/sesion)
+app/                    rutas (landing, /ingresar, /registro, /mis-grupos, /grupos/…, /invitaciones/…, /api/sesion)
 components/             UI (auth/, ui/, navbar)
-lib/                    firebase (client/admin), sesión, perfil, utilidades
-tests/                  unit/, rules/, smoke/
+lib/domain/             algoritmo de sorteo y validaciones (puro, sin Firebase)
+lib/data/               capa de datos con toda la autorización (server-only)
+lib/                    firebase (client/admin), sesión, perfil, formatos
+tests/                  unit/, rules/, integration/, smoke/, e2e/
 scripts/                check-domains.sh
 specs/                  specs de Spec Kit
 .specify/               constitución, templates y scripts de Spec Kit

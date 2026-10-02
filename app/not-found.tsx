@@ -1,6 +1,6 @@
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 
 export const metadata = { title: "No encontramos esa página" };
 
@@ -12,9 +12,7 @@ export default function NotFound() {
       <p className="mb-8 text-muted-foreground">
         Puede que el link esté incompleto o que la página ya no exista.
       </p>
-      <Link href="/">
-        <Button>Volver al inicio</Button>
-      </Link>
+      <ButtonLink href="/">Volver al inicio</ButtonLink>
     </section>
   );
 }

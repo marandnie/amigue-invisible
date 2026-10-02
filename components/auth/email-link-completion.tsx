@@ -1,10 +1,10 @@
 "use client";
 
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import { Input } from "@/components/ui/input";
 import { authErrorMessage } from "@/lib/auth-errors";
 import { EMAIL_LINK_STORAGE_KEY, startServerSession } from "@/lib/client-session";
@@ -85,9 +85,7 @@ export function EmailLinkCompletion({ next }: { next: string }) {
       <p role="alert" className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
         {state === "invalido" ? "Este link no es válido o está incompleto." : error}
       </p>
-      <Link href={`/ingresar?next=${encodeURIComponent(next)}`}>
-        <Button variant="outline">Pedir un link nuevo</Button>
-      </Link>
+      <ButtonLink href={`/ingresar?next=${encodeURIComponent(next)}`} variant="outline">Pedir un link nuevo</ButtonLink>
     </div>
   );
 }

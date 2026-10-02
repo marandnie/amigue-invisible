@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-30
 
-**Status**: Draft (aclarada el 2026-10-02)
+**Status**: En implementación (US1–US5 hechas; US6 y US7 pendientes)
 
 **Input**: DESIGN.md (features 1–4: crear grupo e invitar, sorteo secreto, exclusiones y listas de deseos, presupuesto y datos del evento), adaptado a la constitución v1.0.0.
 

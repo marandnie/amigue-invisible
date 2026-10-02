@@ -1,6 +1,6 @@
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import { getSessionUser } from "@/lib/session";
 
 const pasos = [
@@ -36,25 +36,14 @@ export default async function Home() {
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           {user ? (
-            <Link href="/mis-grupos">
-              <Button size="lg">Ir a mis grupos</Button>
-            </Link>
+            <ButtonLink href="/mis-grupos" size="lg">Ir a mis grupos</ButtonLink>
           ) : (
             <>
-              <Link href="/registro">
-                <Button size="lg">Organizar un sorteo</Button>
-              </Link>
-              <Link href="/ingresar">
-                <Button variant="outline" size="lg">
-                  Ya tengo cuenta
-                </Button>
-              </Link>
+              <ButtonLink href="/registro" size="lg">Organizar un sorteo</ButtonLink>
+              <ButtonLink href="/ingresar" variant="outline" size="lg">Ya tengo cuenta</ButtonLink>
             </>
           )}
         </div>
-        <p className="mt-6 text-sm text-muted-foreground">
-          Estamos terminando la app para estas fiestas: ya podés crear tu cuenta.
-        </p>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
