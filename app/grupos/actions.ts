@@ -6,6 +6,8 @@ import { notFound, redirect } from "next/navigation";
 import * as data from "@/lib/data/groups";
 import { DomainError, NotFoundError } from "@/lib/domain/errors";
 import { exclusionSchema, groupSchema, parseParticipantLines, wishSchema } from "@/lib/domain/schemas";
+import { sendDrawNotices, sendInvitations } from "@/lib/notifications";
+import { requestOrigin } from "@/lib/request-origin";
 import { requireUser } from "@/lib/session";
 
 // Server Actions de la feature 002. Validan con zod y delegan la autorización en lib/data/groups.ts.
@@ -65,8 +67,29 @@ export async function addParticipantsAction(groupId: string, _prev: FormState, f
   if (!lines.length) return { error: "Escribí al menos un nombre." };
   const r = await attempt(() => data.addParticipants(user, groupId, lines));
   if (r.error) return { error: r.error };
+  const { group, created } = r.value!;
+  let mailNote = "";
+  if (created.some((p) => p.email)) {
+    const mail = await sendInvitations(group, created, await requestOrigin(), user.email);
+    if (mail.ids.length) await data.recordInviteEmail(user, groupId, mail.ids, mail.failed ? "fallo" : "enviado");
+    mailNote = mail.failed
+      ? " No pudimos mandar las invitaciones por mail: compartí los links por WhatsApp."
+      : ` Les mandamos la invitación por mail a ${mail.sent === 1 ? "1 persona" : `${mail.sent} personas`}.`;
+  }
   revalidatePath(groupPath(groupId));
-  return { ok: lines.length === 1 ? `Agregaste a ${lines[0].name}.` : `Agregaste ${lines.length} personas.` };
+  const added = created.length === 1 ? `Agregaste a ${created[0].name}.` : `Agregaste ${created.length} personas.`;
+  return { ok: added + mailNote };
+}
+
+export async function resendInviteEmailAction(groupId: string, participantId: string): Promise<FormState> {
+  const user = await requireUser(groupPath(groupId));
+  const r = await attempt(() => data.getPendingInviteForEmail(user, groupId, participantId));
+  if (r.error) return { error: r.error };
+  const { group, participant } = r.value!;
+  const mail = await sendInvitations(group, [participant], await requestOrigin(), user.email);
+  await data.recordInviteEmail(user, groupId, [participant.id], mail.failed ? "fallo" : "enviado");
+  revalidatePath(groupPath(groupId));
+  return mail.failed ? { error: "No pudimos mandar el mail. Probá más tarde o mandale el link por WhatsApp." } : { ok: "Mail enviado" };
 }
 
 export async function removeParticipantAction(groupId: string, participantId: string): Promise<FormState> {
@@ -107,6 +130,8 @@ export async function drawAction(groupId: string, _prev: FormState, fd: FormData
   const user = await requireUser(groupPath(groupId));
   const r = await attempt(() => data.runDraw(user, groupId, fd.get("confirmar") === "on"));
   if (r.error) return { error: r.error };
+  // El sorteo ya está hecho: si el aviso por mail falla, cada uno igual lo ve en su página.
+  await sendDrawNotices(r.value!.group, r.value!.recipients, await requestOrigin());
   revalidatePath(groupPath(groupId));
   redirect(`${groupPath(groupId)}?sorteado=1`);
 }

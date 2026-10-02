@@ -8,7 +8,7 @@
 
 Grupos, invitaciones por link, sorteo con revelación privada, listas de deseos y exclusiones, sobre la plataforma de la 001 (Next.js en App Hosting, Firestore, Firebase Auth). El sorteo es un *matching* perfecto con muestreo por rechazo y respaldo con Kuhn. Corre solo en el servidor, dentro de una transacción. Toda la autorización vive en una capa de datos del servidor; las reglas de Firestore siguen en deny-all. Detalle en [research.md](./research.md).
 
-**Alcance de esta iteración**: US1–US5 (P1 y P2) completas. De US7 entra el algoritmo de arreglo mínimo con sus tests; la pantalla de reacomodo queda para la próxima. US6 (mails) se difiere hasta elegir proveedor.
+**Alcance de esta iteración**: US1–US5 (P1 y P2) completas, más US6 (mails con Resend, sin rebotes). De US7 entra el algoritmo de arreglo mínimo con sus tests; la pantalla de reacomodo queda para la próxima.
 
 ## Technical Context
 

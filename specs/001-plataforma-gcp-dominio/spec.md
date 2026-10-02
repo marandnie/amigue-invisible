@@ -110,7 +110,7 @@ Como responsable (y FinOps), quiero que el proyecto cueste prácticamente cero s
 ### Functional Requirements
 
 - **FR-001**: El sistema MUST servir la app en `https://amigoinvisible.com.ar` con un certificado TLS válido que se renueva solo.
-- **FR-002**: El sistema MUST redirigir con código permanente (301/308) `www.amigoinvisible.com.ar`, `amigueinvisible.com.ar` y `www.amigueinvisible.com.ar` a `https://amigoinvisible.com.ar`, conservando ruta y query string.
+- **FR-002**: El sistema MUST redirigir con código permanente (301/308) `www.amigoinvisible.com.ar`, `amigueinvisible.com.ar`, `www.amigueinvisible.com.ar` y el dominio por defecto de App Hosting (`*.hosted.app`) a `https://amigoinvisible.com.ar`, conservando ruta y query string.
 - **FR-003**: El sistema MUST redirigir todo pedido `http://` a `https://`.
 - **FR-004**: Toda la interfaz de esta feature (landing, login, registro, panel, errores) MUST estar en español de Argentina.
 - **FR-005**: Las personas MUST poder registrarse y entrar con (a) email y contraseña, (b) link de acceso por mail, (c) cuenta de Google.

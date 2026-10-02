@@ -51,6 +51,8 @@ export type Participant = {
   joinedAt: Date | null;
   joinedEmail: string | null;
   inviteToken: string | null;
+  /** Resultado del último envío de la invitación por mail (US6). */
+  inviteEmailStatus: "enviado" | "fallo" | null;
 };
 
 export type Wish = { id: string; text: string; url: string | null };
@@ -104,6 +106,7 @@ function toParticipant(snap: QueryDocumentSnapshot<DocumentData> | DocumentSnaps
     joinedAt: toDate(d.joinedAt),
     joinedEmail: d.joinedEmail ?? null,
     inviteToken: d.inviteToken ?? null,
+    inviteEmailStatus: d.inviteEmailStatus === "enviado" || d.inviteEmailStatus === "fallo" ? d.inviteEmailStatus : null,
   };
 }
 
@@ -307,10 +310,16 @@ export async function deleteGroup(actor: Actor, groupId: string): Promise<void> 
 
 // ---------- participantes e invitaciones ----------
 
-export async function addParticipants(actor: Actor, groupId: string, lines: ParticipantLine[]): Promise<number> {
+export type CreatedParticipant = { id: string; name: string; email: string | null; token: string };
+
+export async function addParticipants(
+  actor: Actor,
+  groupId: string,
+  lines: ParticipantLine[],
+): Promise<{ group: Group; created: CreatedParticipant[] }> {
   if (lines.length === 0) throw new DomainError("Escribí al menos un nombre.");
   await requireHost(groupId, actor);
-  await db().runTransaction(async (tx) => {
+  return db().runTransaction(async (tx) => {
     const group = toGroup(await tx.get(groupRef(groupId)));
     assertOpen(group);
     const existing = (await tx.get(participantsCol(groupId))).docs.map(toParticipant);
@@ -334,9 +343,11 @@ export async function addParticipants(actor: Actor, groupId: string, lines: Part
         `Hay nombres o emails repetidos: ${[...new Set(repeated)].join(", ")}. Si son personas distintas, agregá una inicial o un apodo.`,
       );
     }
+    const created: CreatedParticipant[] = [];
     for (const l of lines) {
       const pRef = participantsCol(groupId).doc();
       const token = newToken();
+      created.push({ id: pRef.id, name: l.name, email: l.email, token });
       tx.set(pRef, {
         name: l.name,
         email: l.email,
@@ -354,8 +365,47 @@ export async function addParticipants(actor: Actor, groupId: string, lines: Part
         createdAt: FieldValue.serverTimestamp(),
       });
     }
+    return { group, created };
   });
-  return lines.length;
+}
+
+/** Guarda si la invitación por mail salió o no (lo ve el organizador). */
+export async function recordInviteEmail(
+  actor: Actor,
+  groupId: string,
+  participantIds: string[],
+  status: "enviado" | "fallo",
+): Promise<void> {
+  if (!participantIds.length) return;
+  await requireHost(groupId, actor);
+  const batch = db().batch();
+  for (const id of participantIds) {
+    if (!isSafeId(id)) continue;
+    batch.set(
+      participantsCol(groupId).doc(id),
+      { inviteEmailStatus: status, inviteEmailAt: FieldValue.serverTimestamp() },
+      { merge: true },
+    );
+  }
+  await batch.commit();
+}
+
+/** Datos para reenviar la invitación por mail a un pendiente (solo el organizador). */
+export async function getPendingInviteForEmail(
+  actor: Actor,
+  groupId: string,
+  participantId: string,
+): Promise<{ group: Group; participant: CreatedParticipant & { email: string } }> {
+  if (!isSafeId(participantId)) throw new NotFoundError();
+  const group = await requireHost(groupId, actor);
+  assertOpen(group);
+  const snap = await participantsCol(groupId).doc(participantId).get();
+  if (!snap.exists) throw new NotFoundError();
+  const p = toParticipant(snap);
+  if (p.uid) throw new DomainError(`${p.name} ya se sumó.`);
+  if (!p.email) throw new DomainError(`${p.name} no tiene email cargado.`);
+  if (!p.inviteToken) throw new DomainError("Generá un link nuevo y probá de nuevo.");
+  return { group, participant: { id: p.id, name: p.name, email: p.email, token: p.inviteToken } };
 }
 
 export async function removeParticipant(actor: Actor, groupId: string, participantId: string): Promise<void> {
@@ -530,7 +580,7 @@ export async function runDraw(
   groupId: string,
   confirmPending: boolean,
   rng: Rng = secureRng,
-): Promise<{ participants: number; removedPending: number }> {
+): Promise<{ group: Group; participants: number; removedPending: number; recipients: { name: string; email: string }[] }> {
   await requireHost(groupId, actor);
   return db().runTransaction(async (tx) => {
     const group = toGroup(await tx.get(groupRef(groupId)));
@@ -567,7 +617,10 @@ export async function runDraw(
       exclusions,
       updatedAt: FieldValue.serverTimestamp(),
     });
-    return { participants: joined.length, removedPending: pending.length };
+    const recipients = joined
+      .map((p) => ({ name: p.name, email: p.joinedEmail ?? p.email }))
+      .filter((r): r is { name: string; email: string } => !!r.email);
+    return { group, participants: joined.length, removedPending: pending.length, recipients };
   });
 }
 

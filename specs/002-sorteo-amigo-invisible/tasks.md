@@ -74,10 +74,12 @@ description: "Tareas de la feature 002: sorteo de amigo invisible"
 - [ ] T029 [US7] UI de reacomodo en la vista del organizador
 - [ ] T030 [US7] Avisos en la app a quien le cambió la asignación
 
-## Phase 9: User Story 6 – Avisos por mail (P3) — siguiente iteración
+## Phase 9: User Story 6 – Avisos por mail (P3)
 
-- [ ] T031 [US6] Elegir proveedor (Resend u otro); secretos en Secret Manager; SPF/DKIM en Cloudflare
-- [ ] T032 [US6] Mail de invitación y mail de "ya se hizo el sorteo" (sin revelar el nombre)
+- [x] T031 [US6] Elegir proveedor: Resend (research R7)
+- [ ] T031b [US6] 🖐️ Dominio `amigoinvisible.com.ar` en Resend + registros en Cloudflare; API key con permiso de envío; `firebase apphosting:secrets:set RESEND_API_KEY` (antes de mergear)
+- [x] T032 [US6] Mail de invitación y mail de "ya se hizo el sorteo" (sin revelar el nombre): `lib/email/*`, `lib/notifications.ts`, estado del envío y "Reenviar mail" (tests unit + integración)
+- [ ] T037 [US6] Rebotes: webhook de Resend firmado (svix) que marque el estado como "rebotó"
 
 ## Phase 10: Polish
 
@@ -89,7 +91,7 @@ description: "Tareas de la feature 002: sorteo de amigo invisible"
 ## Dependencies
 
 - Foundational (T004–T008) bloquea todo. US1 → US2 → US3 en orden (cada una usa la anterior). US4 y US5 dependen de US1; US4 se completa con US3 (ver la lista de quien recibo).
-- US6 y US7 quedan para la próxima iteración.
+- US7 queda para la próxima iteración. De US6 falta la configuración en Resend (T031b) y los rebotes (T037).
 
 ## Implementation Strategy
 

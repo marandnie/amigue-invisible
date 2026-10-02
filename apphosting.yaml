@@ -19,3 +19,15 @@ env:
     availability:
       - BUILD
       - RUNTIME
+
+  # Mails transaccionales (feature 002, US6) con Resend.
+  - variable: EMAIL_FROM
+    value: "Amigo Invisible <no-responder@amigoinvisible.com.ar>"
+    availability:
+      - RUNTIME
+  # El secreto tiene que existir ANTES del deploy, si no el rollout falla:
+  #   firebase apphosting:secrets:set RESEND_API_KEY --project amigue-invisible-604df
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+    availability:
+      - RUNTIME
