@@ -62,7 +62,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 - [x] T018 [P] [US1] Reescribir `app/page.tsx` en español (sin dependencia de sesión en esta fase: CTAs "Organizar un sorteo" → `/registro` e "Ya tengo cuenta" → `/ingresar`)
 - [x] T019 [P] [US1] Crear `app/not-found.tsx` en español con link al inicio
 - [x] T020 [P] [US1] Imagen Open Graph generada en el build (`app/opengraph-image.tsx`, 1200×630) e ícono `app/icon.svg`
-- [ ] T021 [US1] Crear el backend de App Hosting en `us-east4` conectado a GitHub `main` con rollouts automáticos (quickstart §4) y verificar la URL `*.hosted.app`
+- [x] T021 [US1] Crear el backend de App Hosting en `us-east4` conectado a GitHub `main` con rollouts automáticos (quickstart §4) y verificar la URL `*.hosted.app`
 - [ ] T022 [US1] 🖐️ Conectar `amigoinvisible.com.ar` en App Hosting, cargar los registros en Cloudflare en *DNS only* y esperar *Connected* (quickstart §5). Completar "Valor real" en `contracts/dns-records.md`
 - [ ] T023 [US1] Validar US1 con el quickstart §7
 
