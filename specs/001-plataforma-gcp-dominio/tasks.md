@@ -27,9 +27,9 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 - [x] T001 Usar el repo `marandnie/amigue-invisible`: la versión Angular queda en el tag `legacy-angular`; rama `001-plataforma-gcp-dominio` con el scaffold Next.js (commit original del `git-repo.tar.gz`)
 - [x] T002 Commitear Spec Kit (`.specify/`, `.claude/skills/`, `specs/`) en la rama
 - [ ] T003 🖐️ Push de la rama `001-plataforma-gcp-dominio` y del tag `legacy-angular`; PR a `main`; desactivar GitHub Pages en el repo (tenía `CNAME` = amigueinvisible.com.ar) — *2026-10-02: push y tag hechos, Pages despublicado; falta el PR*
-- [ ] T004 [P] 🖐️ Crear el proyecto Firebase (`amigue-invisible-604df`, creado), pasarlo a Blaze y crear el presupuesto de USD 5/mes con alertas 50/90/100 % (quickstart §2.1–2.2)
+- [ ] T004 [P] 🖐️ Crear el proyecto Firebase (`amigue-invisible-604df`, creado), pasarlo a Blaze y crear el presupuesto de USD 5/mes con alertas 50/90/100 % (quickstart §2.1–2.2) — *Blaze hecho; falta el presupuesto*
 - [x] T005 [P] 🖐️ Crear en Cloudflare las zonas `amigoinvisible.com.ar` y `amigueinvisible.com.ar` (plan Free) y anotar los nameservers en `contracts/dns-records.md`
-- [ ] T006 🖐️ Delegar ambos dominios en nic.ar a los nameservers de Cloudflare y verificar con `dig +short NS` (depende de T005)
+- [x] T006 🖐️ Delegar ambos dominios en nic.ar a los nameservers de Cloudflare y verificar con `dig +short NS` (depende de T005)
 
 ---
 
@@ -45,7 +45,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 - [x] T012 [P] Crear `lib/firebase/admin.ts` (Admin SDK con credenciales por defecto; en dev usa los emuladores vía `FIREBASE_AUTH_EMULATOR_HOST` y `FIRESTORE_EMULATOR_HOST`)
 - [x] T013 [P] Reescribir `.env.example` con las variables de Firebase y de emuladores (sin secretos)
 - [x] T014 [P] Crear `apphosting.yaml` según plan.md (runConfig + env `NEXT_PUBLIC_*`)
-- [ ] T015 🖐️ Crear Firestore en `us-east4` y desplegar reglas e índices (quickstart §2.3–2.4)
+- [x] T015 🖐️ Crear Firestore en `us-east4` y desplegar reglas e índices (quickstart §2.3–2.4)
 - [x] T016 Verificar que `npm run build` y `npm run test:rules` pasan en local
 
 **Checkpoint**: la app compila sin Prisma/Auth.js y las reglas están testeadas
@@ -91,7 +91,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 
 **Independent Test**: quickstart §7 US3
 
-- [ ] T028 [US3] 🖐️ Configurar Firebase Auth: Email/Contraseña + Email link, Google, una cuenta por email, contraseña mín. 10, plantillas en español, dominio autorizado `amigoinvisible.com.ar` (quickstart §2.5)
+- [ ] T028 [US3] 🖐️ *(Email/Contraseña y Google ya habilitados por CLI el 2026-10-02)* Configurar Firebase Auth: Email/Contraseña + Email link, Google, una cuenta por email, contraseña mín. 10, plantillas en español, dominio autorizado `amigoinvisible.com.ar` (quickstart §2.5)
 - [x] T029 [P] [US3] Crear `lib/session.ts` con `getSessionUser()` y `requireUser(nextPath)` según `contracts/session-api.md`
 - [x] T030 [US3] Crear `app/api/sesion/route.ts`: `POST` (verifica el token, exige login reciente, chequea Origin, crea la cookie `__session` de 14 días, upsert de `users/{uid}`) y `DELETE` (revoca y borra la cookie). Depende de T029
 - [x] T031 [P] [US3] Proteger rutas privadas sin middleware: `requireUser(ruta)` en cada página; `next` solo acepta rutas internas (`lib/safe-next.ts` + `tests/unit/safe-next.test.ts`)
