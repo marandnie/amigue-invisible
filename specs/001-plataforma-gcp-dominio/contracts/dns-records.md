@@ -8,8 +8,8 @@ Los valores exactos (IP, `fah-claim`, destinos de `_acme-challenge` y de DKIM) l
 
 | Dominio | Nameservers |
 |---|---|
-| `amigoinvisible.com.ar` | los 2 `*.ns.cloudflare.com` asignados a la zona |
-| `amigueinvisible.com.ar` | los 2 `*.ns.cloudflare.com` asignados a la zona |
+| `amigoinvisible.com.ar` | `brianna.ns.cloudflare.com`, `tosana.ns.cloudflare.com` |
+| `amigueinvisible.com.ar` | `brianna.ns.cloudflare.com`, `tosana.ns.cloudflare.com` |
 
 ## Zona `amigoinvisible.com.ar`
 
