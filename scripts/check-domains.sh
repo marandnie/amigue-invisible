@@ -23,6 +23,8 @@ for host in "${HOSTS[@]}"; do
       continue
     fi
     read -r codigo saltos final <<<"$salida"
+    # App Hosting redirige http→https como "https://host:443/…": es la misma URL.
+    final="${final/:443\//\/}"
     estado="ok"
     if [[ "$final" != "$ESPERADA" ]]; then estado="URL final incorrecta"; fi
     if (( saltos > MAX_SALTOS )); then estado="demasiados saltos"; fi

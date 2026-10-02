@@ -81,7 +81,7 @@ description: "Tareas de la feature 002: sorteo de amigo invisible"
 
 ## Phase 10: Polish
 
-- [ ] T033 Desplegar índices (`firebase deploy --only firestore`)
+- [x] T033 Desplegar índices (`firebase deploy --only firestore`)
 - [ ] T034 Correr el quickstart en producción con 3 cuentas
 - [x] T035 Actualizar README y CLAUDE.md
 - [x] T036 [P] Prueba E2E en navegador real: `tests/e2e/flujo-sorteo.mjs` (`npm run test:e2e`)
