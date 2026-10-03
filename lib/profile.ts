@@ -67,3 +67,12 @@ export async function getProfile(uid: string): Promise<Profile | null> {
     providers: Array.isArray(d.providers) ? d.providers : [],
   };
 }
+
+/** Feature 005: cambia el nombre para mostrar. Los grupos existentes no se tocan (research R2). */
+export async function updateDisplayName(uid: string, displayName: string): Promise<void> {
+  await adminDb().collection("users").doc(uid).update({ displayName });
+  // Coherencia con Auth (research R1); si falla, el perfil ya quedó bien.
+  await adminAuth()
+    .updateUser(uid, { displayName })
+    .catch(() => undefined);
+}
