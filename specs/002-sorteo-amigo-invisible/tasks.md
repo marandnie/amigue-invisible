@@ -39,9 +39,10 @@ description: "Tareas de la feature 002: sorteo de amigo invisible"
 - [x] T009 [US1] Capa de datos: `createGroup`, `updateGroup`, `deleteGroup`, `addParticipants`, `removeParticipant`, `regenerateInvite`
 - [x] T010 [P] [US1] `components/groups/group-form.tsx` (alta y edición, con "Yo también participo")
 - [x] T011 [US1] `app/grupos/nuevo/page.tsx` y `app/grupos/[id]/editar/page.tsx` + acciones
-- [x] T012 [P] [US1] `components/groups/copy-link-button.tsx` y `share-whatsapp-button.tsx`
+- [x] T012 [P] [US1] `components/groups/copy-link-button.tsx` y `share-whatsapp-button.tsx` (reemplazados por T038)
 - [x] T013 [US1] `app/grupos/[id]/page.tsx` (vista organizador): datos, participantes con estado, alta individual y en lote, sacar, regenerar
 - [x] T014 [US1] `app/mis-grupos/page.tsx`: grupos que organiza y en los que participa
+- [x] T038 [US1] Compartir y copiar el mensaje completo (research R11): `components/groups/share-invite.tsx` ("Compartir" en el celular, "WhatsApp" en la compu) y `copy-text-button.tsx` ("Copiar mensaje"), con test de `lib/links.ts` y E2E `tests/e2e/compartir.mjs`
 
 ## Phase 4: User Story 2 – Sumarse desde la invitación (P1)
 

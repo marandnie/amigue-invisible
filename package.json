@@ -13,7 +13,7 @@
     "check:domains": "bash scripts/check-domains.sh",
     "test:smoke": "firebase emulators:exec --only auth,firestore --project demo-amigo-invisible \"bash tests/smoke/session.sh\"",
     "test:integration": "firebase emulators:exec --only auth,firestore --project demo-amigo-invisible \"vitest run tests/integration\"",
-    "test:e2e": "node tests/e2e/flujo-sorteo.mjs"
+    "test:e2e": "node tests/e2e/flujo-sorteo.mjs && node tests/e2e/compartir.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",

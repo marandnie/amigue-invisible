@@ -18,6 +18,10 @@
 - Q: ¿Quien organiza siempre entra en el sorteo? → A: No necesariamente. Existe la opción de solo organizar. → FR-004, US1.
 - Q: ¿Lenguaje inclusivo o tradicional? → A: Tradicional. → FR-025.
 
+### Session 2026-10-03
+
+- Q: ¿Qué copia el botón de copiar y cómo se comparte por otras apps (Telegram, etc.)? → A: Copia el **mensaje completo** de invitación, el mismo que va por WhatsApp, con el link adentro. En el celular, en lugar de "WhatsApp" hay un solo botón **"Compartir"** que abre el menú del teléfono. En la compu, donde ese menú casi nunca trae WhatsApp, queda el botón "WhatsApp". → FR-006, US1.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Organizar un grupo e invitar (Priority: P1)
@@ -31,7 +35,7 @@ Una persona con cuenta arma un grupo ("Navidad familia Nieto"): pone nombre, pre
 **Acceptance Scenarios**:
 
 1. **Given** una persona logueada, **When** crea un grupo con nombre, presupuesto y fecha, **Then** queda como organizadora y ve la página del grupo.
-2. **Given** un grupo sin sortear, **When** la organizadora agrega a "Tía Marta", **Then** aparece en la lista como "pendiente" con un botón para copiar su link y otro para compartirlo por WhatsApp.
+2. **Given** un grupo sin sortear, **When** la organizadora agrega a "Tía Marta", **Then** aparece en la lista como "pendiente" con un botón para compartir su invitación y otro para copiarla. Compartir abre el menú del teléfono en el celular y WhatsApp en la compu. Copiar copia el mensaje completo con el link.
 3. **Given** un grupo sin sortear, **When** la organizadora pega una lista de nombres (uno por línea, con email opcional), **Then** se crean todos los participantes de una vez y avisa si hay nombres o emails repetidos.
 4. **Given** un participante pendiente, **When** la organizadora lo saca del grupo o regenera su link, **Then** el link anterior deja de funcionar.
 5. **Given** un grupo, **When** la organizadora edita presupuesto, fecha, lugar o notas, **Then** todos los participantes ven los datos nuevos.
@@ -170,7 +174,7 @@ Ya se hizo el sorteo y alguien se baja, o hay que sumar a una persona que se olv
 **Participantes e invitaciones**
 
 - **FR-005**: La organizadora MUST poder agregar participantes de a uno (nombre y email opcional) o en lote (una línea por persona), mientras el grupo no esté sorteado.
-- **FR-006**: Cada participante MUST tener un link de invitación personal, no adivinable, que vence a los 30 días y que la organizadora puede copiar, compartir por WhatsApp, regenerar o revocar.
+- **FR-006**: Cada participante MUST tener un link de invitación personal, no adivinable, que vence a los 30 días y que la organizadora puede compartir, copiar, regenerar o revocar. Compartir y copiar usan el mismo mensaje de invitación con el link adentro. Compartir abre el menú del teléfono en el celular y WhatsApp en la compu.
 - **FR-007**: Abrir un link válido MUST mostrar nombre del grupo, organizadora, presupuesto y fecha, y permitir sumarse después de entrar o crear cuenta, volviendo a la invitación.
 - **FR-008**: Un link MUST poder usarse una sola vez; una cuenta MUST poder estar una sola vez en cada grupo.
 - **FR-009**: La organizadora MUST ver el estado de cada participante (pendiente / sumado, y con qué email se sumó) y poder sacar participantes antes del sorteo.

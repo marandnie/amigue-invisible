@@ -8,7 +8,7 @@ Todas las páginas están en español; las rutas privadas usan `requireUser()`. 
 |---|---|---|
 | `/mis-grupos` | con sesión | grupos que organiza, grupos donde participa, invitaciones pendientes para su email (verificado → "Sumarme") |
 | `/grupos/nuevo` | con sesión | formulario de alta (nombre, presupuesto, moneda, fecha y hora, lugar, notas, "Yo también participo") |
-| `/grupos/[id]` | Org. o Part. | datos del grupo. **Org.**: participantes con estado, alta individual y en lote, copiar o compartir link, sacar, regenerar, editar, exclusiones, sortear. **Part.**: datos y quiénes se sumaron |
+| `/grupos/[id]` | Org. o Part. | datos del grupo. **Org.**: participantes con estado, alta individual y en lote, compartir o copiar la invitación (mensaje con link), sacar, regenerar, editar, exclusiones, sortear. **Part.**: datos y quiénes se sumaron |
 | `/grupos/[id]/editar` | Org. | mismo formulario que el alta; borrar grupo |
 | `/grupos/[id]/exclusiones` | Org., antes del sorteo | pares excluidos, alta (mutua por defecto) y baja; aviso si el sorteo quedaría imposible |
 | `/grupos/[id]/yo` | Part. | mi lista de deseos (editable). Después del sorteo: tarjeta para descubrir a quién le regalo y su lista |

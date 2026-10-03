@@ -10,15 +10,15 @@ import {
 } from "@/app/grupos/actions";
 import { ActionButton } from "@/components/groups/action-button";
 import { AddParticipantsForm } from "@/components/groups/add-participants-form";
-import { CopyLinkButton } from "@/components/groups/copy-link-button";
 import { DrawForm } from "@/components/groups/draw-form";
 import { GroupDetails, StatusBadge } from "@/components/groups/group-details";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { ShareInvite } from "@/components/groups/share-invite";
+import { Button } from "@/components/ui/button";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getGroupAccess, listJoinedNames, listParticipants, type Access } from "@/lib/data/groups";
 import { MIN_PARTICIPANTS } from "@/lib/domain/draw";
 import { formatShortDate } from "@/lib/format";
-import { inviteMessage, inviteUrl, whatsappShareUrl } from "@/lib/links";
+import { inviteMessage, inviteUrl } from "@/lib/links";
 import { requestOrigin } from "@/lib/request-origin";
 import { firstParam, type SearchParams } from "@/lib/search-params";
 import { requireUser } from "@/lib/session";
@@ -113,8 +113,7 @@ async function HostView({ access }: { access: Access }) {
                     <div className="flex flex-wrap items-start gap-2">
                       {url ? (
                         <>
-                          <CopyLinkButton url={url} />
-                          <a href={whatsappShareUrl(inviteMessage(p.name, group.name, url))} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", size: "sm" })}>WhatsApp</a>
+                          <ShareInvite message={inviteMessage(p.name, group.name, url)} />
                           {p.email ? (
                             <ActionButton
                               action={resendInviteEmailAction.bind(null, group.id, p.id)}
