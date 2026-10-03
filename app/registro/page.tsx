@@ -6,7 +6,7 @@ import { safeNext } from "@/lib/safe-next";
 import { firstParam, type SearchParams } from "@/lib/search-params";
 import { getSessionUser } from "@/lib/session";
 
-export const metadata = { title: "Crear cuenta" };
+export const metadata = { title: "Crear cuenta", robots: { index: false, follow: true } };
 
 export default async function RegistroPage({ searchParams }: { searchParams: SearchParams }) {
   const next = safeNext(firstParam((await searchParams).next));

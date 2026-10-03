@@ -1,12 +1,8 @@
 import type { MetadataRoute } from "next";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://amigoinvisible.com.ar";
+import { absoluteUrl, PUBLIC_PAGES } from "@/lib/seo";
 
-// Solo las páginas públicas (ver app/robots.ts).
+// Feature 006 (FR-004): solo las páginas públicas con contenido. Ver app/robots.ts.
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    { url: `${SITE}/`, changeFrequency: "monthly", priority: 1 },
-    { url: `${SITE}/registro`, changeFrequency: "yearly", priority: 0.5 },
-    { url: `${SITE}/ingresar`, changeFrequency: "yearly", priority: 0.5 },
-  ];
+  return PUBLIC_PAGES.map((p) => ({ url: absoluteUrl(p.path), changeFrequency: p.changeFrequency, priority: p.priority }));
 }

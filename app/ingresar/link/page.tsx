@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { safeNext } from "@/lib/safe-next";
 import { firstParam, type SearchParams } from "@/lib/search-params";
 
-export const metadata = { title: "Entrando" };
+export const metadata = { title: "Entrando", robots: { index: false, follow: true } };
 
 export default async function IngresarConLinkPage({ searchParams }: { searchParams: SearchParams }) {
   const next = safeNext(firstParam((await searchParams).next));
