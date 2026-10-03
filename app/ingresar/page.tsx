@@ -6,7 +6,7 @@ import { safeNext } from "@/lib/safe-next";
 import { firstParam, type SearchParams } from "@/lib/search-params";
 import { getSessionUser } from "@/lib/session";
 
-export const metadata = { title: "Ingresar" };
+export const metadata = { title: "Ingresar", robots: { index: false, follow: true } };
 
 export default async function IngresarPage({ searchParams }: { searchParams: SearchParams }) {
   const next = safeNext(firstParam((await searchParams).next));

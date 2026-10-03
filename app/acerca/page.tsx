@@ -49,6 +49,11 @@ export default function AcercaPage() {
             </li>
           ))}
         </ol>
+        <p>
+          <Link href="/como-funciona" className="underline underline-offset-2">
+            Ver la guía paso a paso
+          </Link>
+        </p>
       </Section>
 
       <Section id="privacidad-del-sorteo" title="El secreto está a salvo">
