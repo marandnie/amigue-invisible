@@ -40,3 +40,15 @@ env:
     secret: RESEND_API_KEY
     availability:
       - RUNTIME
+
+  # Feature 004: avisos de registro para la administradora.
+  # ADMIN_EMAIL recibe el aviso de cada alta y el reporte semanal (no es secreta: ya está en el historial de commits).
+  - variable: ADMIN_EMAIL
+    value: mandieto@gmail.com
+    availability:
+      - RUNTIME
+  # Service account con la que firma Cloud Scheduler el pedido del reporte (ver specs/004-avisos-de-registro/plan.md).
+  - variable: REPORT_INVOKER_SA
+    value: reporte-semanal@amigue-invisible-604df.iam.gserviceaccount.com
+    availability:
+      - RUNTIME

@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
 import { adminAuth } from "@/lib/firebase/admin";
+import { notifySignup } from "@/lib/admin-notices";
 import { upsertProfile } from "@/lib/profile";
 import { SESSION_COOKIE, SESSION_MAX_AGE_S } from "@/lib/session";
 
@@ -55,7 +56,9 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await upsertProfile(decoded);
+    const profile = await upsertProfile(decoded);
+    // Feature 004 (US1): aviso a la administradora en el primer ingreso. Nunca rompe el login.
+    if (profile.created) await notifySignup(profile);
   } catch (e) {
     // El login no debe fallar por el perfil; se vuelve a intentar en el próximo ingreso.
     console.error("upsertProfile falló", (e as { code?: string }).code ?? e);
