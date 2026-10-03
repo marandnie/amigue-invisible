@@ -139,6 +139,9 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 ## Phase 8: Polish
 
 - [x] T054 [US2] `middleware.ts` + `lib/canonical.ts`: `*.hosted.app` → `https://amigoinvisible.com.ar` con 308 (con tests)
+- [x] T055 [US3] Login con Google en iPhone (research R6): `lib/firebase/build-config.mjs` (config web desde `FIREBASE_WEBAPP_CONFIG` + `authDomain` propio), *rewrites* de `/__/auth/*` y `/__/firebase/*` en `next.config.mjs`, `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` en `apphosting.yaml`, con tests
+- [ ] T056 [US3] 🖐️ Agregar `https://amigoinvisible.com.ar/__/auth/handler` en *Authorized redirect URIs* del cliente OAuth web (Google Cloud → APIs & Services → Credentials). Va **antes** de mergear T055
+- [ ] T057 [US3] Después del deploy: `curl -sI https://amigoinvisible.com.ar/__/auth/handler` → 200, y entrar con Google desde un iPhone (Safari y Chrome)
 - [ ] T053 [US2] FR-002 pide redirección permanente (301/308) y App Hosting responde 302. Decidir si alcanza o aplicar el plan B de research R7 (Redirect Rule de Cloudflare con 301) para `www` y `amigueinvisible.com.ar`
 
 - [x] T049 [P] Reescribir `README.md`: stack Firebase, desarrollo con emuladores, deploy, DNS y rollback. Marcar como obsoletas las secciones de stack y deploy de `DESIGN.md` (con un aviso arriba del documento, sin borrar su contenido)

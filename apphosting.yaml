@@ -2,7 +2,7 @@
 # https://firebase.google.com/docs/app-hosting/configure
 #
 # La config web de Firebase (apiKey, projectId, …) la inyecta App Hosting en el build
-# (FIREBASE_WEBAPP_CONFIG), así que no hace falta declararla acá.
+# (FIREBASE_WEBAPP_CONFIG), así que no hace falta declararla acá. La lee lib/firebase/build-config.mjs.
 # Los secretos, si aparecen, van con `firebase apphosting:secrets:set` y se referencian con `secret:`.
 
 runConfig:
@@ -19,6 +19,15 @@ env:
     availability:
       - BUILD
       - RUNTIME
+
+  # Login con Google en el mismo dominio que la app (research R6 de la 001): el SDK usa
+  # amigoinvisible.com.ar como authDomain y next.config.mjs hace proxy de /__/auth/* hacia
+  # <proyecto>.firebaseapp.com. Requiere el redirect URI https://amigoinvisible.com.ar/__/auth/handler
+  # en el cliente OAuth web de Google (T056). Solo host, sin https://.
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: amigoinvisible.com.ar
+    availability:
+      - BUILD
 
   # Mails transaccionales (feature 002, US6) con Resend.
   - variable: EMAIL_FROM

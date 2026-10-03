@@ -53,3 +53,6 @@ ui-debug.log*
 
 # resultados de tests
 test-results/
+
+# Claude Code: configuración personal (los comandos /speckit-* de .claude/skills sí se versionan)
+.claude/settings.local.json

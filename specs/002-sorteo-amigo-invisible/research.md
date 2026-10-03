@@ -56,6 +56,7 @@ Formato: Decisión / Por qué / Alternativas descartadas.
 ## R8. Formatos y zona horaria
 
 - **Decisión**: `Intl.NumberFormat("es-AR")` para montos (ARS por defecto) e `Intl.DateTimeFormat("es-AR", { timeZone: "America/Argentina/Buenos_Aires" })` para fechas. El `datetime-local` del formulario se interpreta como hora de Buenos Aires (UTC−3, sin horario de verano).
+- **Se mantiene el selector nativo** (`datetime-local`): muestra el formato del idioma de cada navegador (dd/mm/aaaa en navegadores en español) y trae calendario y selector nativo en el celular. Se probó forzar dd/mm/aaaa con campos de texto y se descartó (2026-10-02).
 
 ## R9. Revelación
 
