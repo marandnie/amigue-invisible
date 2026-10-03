@@ -25,8 +25,9 @@ let auth: Auth | undefined;
 function clientApp(): FirebaseApp {
   const existing = getApps()[0];
   if (existing) return existing;
-  // En App Hosting la config llega por FIREBASE_WEBAPP_CONFIG en el build y initializeApp() sin
-  // argumentos la toma sola. En dev se usan las variables NEXT_PUBLIC_FIREBASE_*.
+  // Las NEXT_PUBLIC_FIREBASE_* vienen de .env.local en dev y de next.config.mjs en App Hosting
+  // (armadas con FIREBASE_WEBAPP_CONFIG y el authDomain propio, ver lib/firebase/build-config.mjs).
+  // initializeApp() sin argumentos queda como respaldo: usa la config que inyecta App Hosting.
   return envConfig.apiKey ? initializeApp(envConfig) : initializeApp();
 }
 

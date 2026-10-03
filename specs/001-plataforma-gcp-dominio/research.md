@@ -46,6 +46,13 @@ Formato: Decisión / Por qué / Alternativas descartadas. Todas las decisiones r
 - **Decisión**: `signInWithPopup`. En navegadores embebidos (Instagram, Facebook y similares), donde Google bloquea el login, se muestra un aviso para abrir el link en el navegador del teléfono o entrar con link por email.
 - **Por qué**: `signInWithRedirect` falla en navegadores que particionan el almacenamiento de terceros cuando el `authDomain` (`*.firebaseapp.com`) no coincide con el dominio de la app. El popup no tiene ese problema.
 - **Alternativa de respaldo**: si los popups dan problemas en mobile, usar `authDomain = amigoinvisible.com.ar` y hacer proxy de `/__/auth/*` hacia `<proyecto>.firebaseapp.com` con un *rewrite* de Next.js.
+- **Resultado (2026-10-02)**: en iPhone (Safari y Chrome, que usa el mismo motor) el popup se quedaba en blanco en `amigue-invisible-604df.firebaseapp.com`. El popup también depende del almacenamiento de ese dominio (lo lee un iframe dentro de la app), y WebKit lo particiona. Se adopta el respaldo, que es la opción 3 de la guía de Firebase (*redirect best practices*):
+  - `authDomain = amigoinvisible.com.ar` (variable `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` en `apphosting.yaml`, disponible en BUILD).
+  - *Rewrites* de Next.js: `/__/auth/*` y `/__/firebase/*` → `https://amigue-invisible-604df.firebaseapp.com/...`. Es un proxy transparente; un redirect 302 no sirve.
+  - El resto de la config web (apiKey, appId, projectId) se toma de `FIREBASE_WEBAPP_CONFIG`, que App Hosting inyecta solo en el build. Así no queda ninguna clave en el repo. Lo arma `lib/firebase/build-config.mjs`.
+  - En el cliente OAuth web de Google se agrega el redirect URI `https://amigoinvisible.com.ar/__/auth/handler` **antes** del deploy. Si no, Google responde `redirect_uri_mismatch` para todos.
+  - Se mantiene `signInWithPopup`: con el proxy, popup y redirect quedan en el mismo dominio que la app.
+  - Verificado en local con el build de producción: `/__/auth/handler`, `/__/auth/iframe` y `/__/auth/handler.js` responden 200 a través del proxy. `/__/firebase/init.json` da 404 también en `firebaseapp.com`, porque el proyecto no usa Firebase Hosting. No hace falta: el handler recibe la apiKey por parámetro.
 
 ## R7. Redirección de los dominios secundarios
 

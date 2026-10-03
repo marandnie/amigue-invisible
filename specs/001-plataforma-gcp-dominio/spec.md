@@ -101,6 +101,7 @@ Como responsable (y FinOps), quiero que el proyecto cueste prácticamente cero s
 - Primer visitante después de horas sin tráfico: la página puede tardar más en responder (arranque en frío), pero no debe dar error ni timeout.
 - El certificado de un dominio todavía se está emitiendo: ese dominio puede mostrar advertencia durante la ventana de emisión; el dominio principal debe estar listo antes de anunciar la app.
 - Alguien abre el link de acceso por mail en otro dispositivo o navegador: se le pide confirmar su email antes de completar el login.
+- Alguien entra con Google desde un iPhone (Safari o Chrome), donde el navegador bloquea el almacenamiento de otros dominios: el login funciona igual que en una compu, porque todo el flujo pasa por `amigoinvisible.com.ar` (research R6).
 - Alguien intenta registrarse con un email que ya existe con otro método (por ejemplo, ya entró con Google): se le explica cómo entrar, sin crear una cuenta duplicada.
 - Alguien pega una URL con `amigueinvisible` en WhatsApp: la vista previa debe funcionar igual (la redirección no rompe la vista previa del link).
 - El dominio vence en NIC.ar: el vencimiento (17/04/2027) debe estar agendado con anticipación.

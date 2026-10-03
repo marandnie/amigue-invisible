@@ -69,6 +69,8 @@ Para cada uno, copiar los registros que muestra el wizard a la zona correspondie
 
 Authentication → Templates → editar → *Customize domain* → `amigoinvisible.com.ar`. Cargar en Cloudflare los TXT/CNAME que indique y el DMARC. Cuando diga "Verification complete", *Apply custom domain*. Agregar `amigoinvisible.com.ar` en *Authorized domains*.
 
+**Login con Google en el dominio propio** (research R6): en Google Cloud → *APIs & Services* → *Credentials* → *OAuth 2.0 Client IDs* → "Web client (auto created by Google Service)" → *Authorized redirect URIs* → agregar `https://amigoinvisible.com.ar/__/auth/handler` (sin borrar la de `firebaseapp.com`). Tiene que estar antes de publicar la versión con `authDomain = amigoinvisible.com.ar`.
+
 ## 7. Validación (checklist de la spec)
 
 ### US1 – Dominio principal
@@ -93,7 +95,8 @@ Authentication → Templates → editar → *Customize domain* → `amigoinvisib
 
 - [ ] Registro con email y contraseña → llega el mail de verificación (en español, remitente `@amigoinvisible.com.ar`, en la bandeja de entrada) → entra a `/mis-grupos`.
 - [ ] Link por mail en el mismo dispositivo → entra. En otro navegador → pide confirmar el email → entra.
-- [ ] Google en Chrome Android y Safari iOS → entra.
+- [ ] Google en Chrome Android, Safari iOS y Chrome iOS → entra (sin quedarse en una pestaña en blanco).
+- [ ] `curl -sI https://amigoinvisible.com.ar/__/auth/handler` → `200` (lo sirve el proxy).
 - [ ] Abrir `/mis-grupos` sin sesión → `/ingresar?next=/mis-grupos` → después de entrar, vuelve a `/mis-grupos`.
 - [ ] Cerrar sesión → `/mis-grupos` vuelve a pedir login.
 - [ ] Registrarse con email+contraseña usando un email que ya entró con Google → no se crea una cuenta duplicada y el mensaje explica cómo entrar.
