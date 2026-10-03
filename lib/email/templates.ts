@@ -101,3 +101,93 @@ export function drawDoneEmail(p: {
   });
   return { subject: subjectLine(`¡Ya se hizo el sorteo de "${p.groupName}"! 🎁`), html, text };
 }
+
+// --- Feature 004: avisos para la administradora -------------------------------------------
+// Solo datos del perfil. Nunca grupos, sorteos ni asignaciones (constitución I, FR-007).
+
+const PROVIDER_LABELS: Record<string, string> = {
+  password: "Mail (contraseña o link)",
+  "google.com": "Google",
+};
+
+export function providerLabel(providers: string[]): string {
+  const labels = [...new Set(providers.map((p) => PROVIDER_LABELS[p] ?? p))];
+  return labels.length ? labels.join(" + ") : "Sin dato";
+}
+
+export function signupNoticeEmail(p: {
+  displayName: string;
+  email: string;
+  providers: string[];
+  createdAt: string;
+  totalUsers: number | null;
+  consoleUrl: string;
+}): RenderedEmail {
+  const { html, text } = layout({
+    preheader: `${p.displayName} (${p.email}) se registró`,
+    heading: "Se registró alguien nuevo",
+    paragraphs: [
+      p.totalUsers === null
+        ? `${p.displayName} entró por primera vez a Amigo Invisible.`
+        : `${p.displayName} entró por primera vez a Amigo Invisible. Ya son ${p.totalUsers} personas registradas.`,
+    ],
+    details: [
+      ["Nombre", p.displayName],
+      ["Mail", p.email || null],
+      ["Cómo entró", providerLabel(p.providers)],
+      ["Cuándo", p.createdAt],
+    ],
+    cta: { label: "Ver usuarios en Firebase", url: p.consoleUrl },
+  });
+  return { subject: subjectLine(`Nuevo registro: ${p.displayName}`), html, text };
+}
+
+export type WeeklySignup = {
+  displayName: string;
+  email: string;
+  providers: string[];
+  createdAt: string;
+  lastLoginAt: string | null;
+};
+
+export const WEEKLY_LIST_LIMIT = 50;
+
+export function weeklyReportEmail(p: {
+  period: string;
+  signups: WeeklySignup[];
+  /** Altas de la semana que no entraron en la lista (más allá del tope). */
+  moreSignups: number;
+  activeUsers: number;
+  totalUsers: number;
+  consoleUrl: string;
+}): RenderedEmail {
+  const shown = p.signups.slice(0, WEEKLY_LIST_LIMIT);
+  const extra = p.moreSignups + (p.signups.length - shown.length);
+  const newCount = p.signups.length + p.moreSignups;
+  const list = shown.map(
+    (s) =>
+      `• ${s.displayName} — ${s.email || "sin mail"} — ${providerLabel(s.providers)} — alta: ${s.createdAt}` +
+      (s.lastLoginAt ? ` — último ingreso: ${s.lastLoginAt}` : ""),
+  );
+  const { html, text } = layout({
+    preheader: `${newCount} alta(s) nueva(s) · ${p.activeUsers} activa(s) · ${p.totalUsers} en total`,
+    heading: "Resumen semanal de registros",
+    paragraphs: [
+      newCount === 0
+        ? "Esta semana no se registró nadie nuevo."
+        : newCount === 1
+          ? "Esta semana se registró 1 persona nueva:"
+          : `Esta semana se registraron ${newCount} personas nuevas:`,
+      ...list,
+      ...(extra > 0 ? [`…y ${extra} más. La lista completa está en Firebase.`] : []),
+    ],
+    details: [
+      ["Período", p.period],
+      ["Altas nuevas", String(newCount)],
+      ["Ingresaron en la semana", String(p.activeUsers)],
+      ["Registrados en total", String(p.totalUsers)],
+    ],
+    cta: { label: "Ver usuarios en Firebase", url: p.consoleUrl },
+  });
+  return { subject: subjectLine(`Amigo Invisible · resumen semanal: ${newCount} alta(s) nueva(s)`), html, text };
+}
