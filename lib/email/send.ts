@@ -10,7 +10,7 @@ export type SendResult = { sent: number; failed: number; simulated: boolean };
 const API = "https://api.resend.com/emails/batch";
 const BATCH = 100; // máximo por pedido en Resend
 
-export const DEFAULT_FROM = "Amigo Invisible <no-responder@amigoinvisible.com.ar>";
+export const DEFAULT_FROM = "Amigo Invisible <no-responder@avisos.amigoinvisible.com.ar>";
 
 export async function sendEmails(
   emails: OutgoingEmail[],

@@ -42,7 +42,7 @@ Formato: Decisión / Por qué / Alternativas descartadas.
 ## R7. Avisos por mail (US6)
 
 - **Decisión** (2026-10-02): **Resend**, por su API REST con `fetch`, sin SDK. Va un solo pedido por lote (`/emails/batch`, hasta 100 mails).
-  - Remitente: `Amigo Invisible <no-responder@amigoinvisible.com.ar>`.
+  - Remitente: `Amigo Invisible <no-responder@avisos.amigoinvisible.com.ar>`.
   - En las invitaciones, el `reply_to` es el email del organizador: si alguien responde, le llega a quien organiza.
 - **Cuándo se manda**:
   - **Invitación**: al agregar personas con email, y con "Reenviar mail".
@@ -50,7 +50,7 @@ Formato: Decisión / Por qué / Alternativas descartadas.
 - **Si falla**: el sorteo y las invitaciones siguen funcionando con los links. Para la invitación, el organizador ve "No se pudo mandar el mail" y puede reenviar.
 - **Rebotes (US6, escenario 3)**: el estado guardado es el de la respuesta de la API (aceptado o no). Los rebotes posteriores necesitan el webhook de Resend firmado (svix). Queda como tarea aparte (T037).
 - **Secretos**: `RESEND_API_KEY` en Secret Manager, referenciado desde `apphosting.yaml`. En desarrollo, sin clave, los mails se muestran en la consola.
-- **DNS**: Resend usa el subdominio `send.amigoinvisible.com.ar` (MX + SPF) y `resend._domainkey` (DKIM). No choca con el SPF de Firebase Auth en el dominio raíz.
+- **Dominio de envío**: el subdominio `avisos.amigoinvisible.com.ar`, siguiendo la recomendación de Resend de usar un subdominio. Así la reputación de las invitaciones (que llegan a gente que todavía no se registró) queda separada de la del dominio raíz, que usa Firebase Auth para los links de acceso. Los registros de Resend quedan bajo `avisos.` (`send.avisos` MX + SPF, `resend._domainkey.avisos` DKIM), sin tocar el SPF del dominio raíz. Región: São Paulo (`sa-east-1`). Seguimiento de clics y aperturas desactivado: los links de invitación llevan tokens y no tienen por qué pasar por un redirector de terceros.
 - **Costo**: plan free (3 dominios, 3.000 mails/mes, **100 por día**). Un grupo de 30 personas son ~60 mails: invitación + aviso. En diciembre el tope diario puede quedar corto; si pasa, los mails fallan y la app sigue andando con los links. El salto es Pro a USD 20/mes.
 
 ## R8. Formatos y zona horaria

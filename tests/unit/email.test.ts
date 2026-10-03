@@ -54,7 +54,7 @@ describe("sendEmails", () => {
     const fetchImpl = vi.fn(async () => new Response("{}", { status: 200 }));
     const r = await sendEmails(
       Array.from({ length: 150 }, (_, i) => ({ ...email(i), replyTo: i === 0 ? "org@example.com" : null })),
-      { apiKey: "re_test", from: "AI <no-responder@amigoinvisible.com.ar>", fetchImpl: fetchImpl as unknown as typeof fetch },
+      { apiKey: "re_test", from: "AI <no-responder@avisos.amigoinvisible.com.ar>", fetchImpl: fetchImpl as unknown as typeof fetch },
     );
     expect(r).toEqual({ sent: 150, failed: 0, simulated: false });
     expect(fetchImpl).toHaveBeenCalledTimes(2);
@@ -63,7 +63,7 @@ describe("sendEmails", () => {
     expect((init.headers as Record<string, string>).Authorization).toBe("Bearer re_test");
     const body = JSON.parse(init.body as string);
     expect(body).toHaveLength(100);
-    expect(body[0]).toMatchObject({ from: "AI <no-responder@amigoinvisible.com.ar>", to: ["p0@example.com"], reply_to: "org@example.com" });
+    expect(body[0]).toMatchObject({ from: "AI <no-responder@avisos.amigoinvisible.com.ar>", to: ["p0@example.com"], reply_to: "org@example.com" });
     expect(body[1].reply_to).toBeUndefined();
   });
 
