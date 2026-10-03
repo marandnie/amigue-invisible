@@ -65,3 +65,14 @@ Formato: Decisión / Por qué / Alternativas descartadas.
 ## R10. Costo (constitución III)
 
 Una página típica hace de 2 a 6 lecturas de Firestore. Un sorteo de 50 personas son unas 110 escrituras. Con decenas de grupos por temporada sigue muy dentro de la cuota gratuita (50k lecturas/día, 20k escrituras/día). Costo incremental ≈ USD 0.
+
+## R11. Compartir la invitación
+
+- **Decisión**: un solo mensaje (`inviteMessage` en `lib/links.ts`) para todos los canales.
+  - **Compartir**: si el navegador tiene `navigator.share` y la pantalla es táctil (`pointer: coarse`, o sea un celular o una tablet), se abre el menú del sistema con `share({ text })`. Si no, se muestra "WhatsApp" (`wa.me`, que en la compu abre WhatsApp Web).
+  - **Copiar mensaje**: copia ese mismo texto.
+- **Por qué**: en el celular, el menú del sistema ya trae WhatsApp, Telegram, Signal, SMS y mail, así que alcanza con un botón. En la compu (Windows o macOS), el menú del sistema muestra WhatsApp solo si la app está instalada, así que ahí es más útil el link a WhatsApp Web.
+- **Detalles**:
+  - El HTML del servidor siempre trae el link de WhatsApp (funciona sin JavaScript). En el celular, el cliente lo cambia por "Compartir" después de cargar.
+  - Se comparte solo `text`, con la URL adentro: si se pasa también `url`, algunas apps la duplican.
+  - Si la persona cierra el menú (`AbortError`), no pasa nada. Ante cualquier otro error, se copia el mensaje.

@@ -17,7 +17,7 @@ Usá 3 cuentas (por ejemplo, tu Google, un email con contraseña y otro con link
 
 ### US1 – Grupo e invitaciones
 - [ ] Crear "Prueba" con presupuesto 15000 ARS y fecha → quedás como organizador y ves la página del grupo.
-- [ ] Agregar "Ana" y, en lote, "Bruno, bruno@…" y "Caro" → aparecen como pendientes con botón de copiar link y de WhatsApp.
+- [ ] Agregar "Ana" y, en lote, "Bruno, bruno@…" y "Caro" → aparecen como pendientes con "WhatsApp" (en la compu) o "Compartir" (en el celular) y "Copiar mensaje". Copiar y pegar en otra app → llega el mensaje completo con el link. En el celular, "Compartir" → Telegram → llega el mismo mensaje.
 - [ ] Pegar en lote un nombre repetido → aviso de repetido, no se crea.
 - [ ] Regenerar el link de Caro → el link viejo deja de funcionar.
 - [ ] Crear un grupo con "Yo también participo" destildado → no aparecés en la lista de participantes.

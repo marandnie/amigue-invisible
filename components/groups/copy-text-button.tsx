@@ -4,7 +4,16 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-export function CopyLinkButton({ url, label = "Copiar link" }: { url: string; label?: string }) {
+/** Copia al portapapeles. Si el navegador no deja, muestra el texto para copiarlo a mano. */
+export async function copyText(text: string): Promise<void> {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    window.prompt("Copiá el texto:", text);
+  }
+}
+
+export function CopyTextButton({ text, label = "Copiar" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <Button
@@ -12,11 +21,7 @@ export function CopyLinkButton({ url, label = "Copiar link" }: { url: string; la
       variant="outline"
       size="sm"
       onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(url);
-        } catch {
-          window.prompt("Copiá el link:", url);
-        }
+        await copyText(text);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
