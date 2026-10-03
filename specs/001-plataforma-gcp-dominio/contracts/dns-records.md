@@ -30,6 +30,17 @@ Reglas:
 - No debe existir ningún AAAA ni otro A/CNAME en `@` o `www` que apunte a otro lado; si no, App Hosting no puede emitir el certificado.
 - Un solo registro `v=spf1` por nombre. Si en la 002 se suma otro remitente en el dominio raíz, se combinan en el mismo registro.
 
+### Mails de la app (Resend, feature 002)
+
+| Nombre | Tipo | Valor | Para qué |
+|---|---|---|---|
+| `resend._domainkey.avisos` | TXT | `p=MIGf…` (clave DKIM de Resend) | firma de los mails de `avisos.amigoinvisible.com.ar` |
+| `rsend.avisos` | CNAME | `rsend-sae1.forge.rmta.net` | envío (región São Paulo) |
+| `send.avisos` | CNAME | `send.forge.rmta.net` | return-path / SPF |
+| `_dmarc` | TXT | `v=DMARC1; p=none;` | DMARC en modo monitoreo (cubre raíz y `avisos`) |
+
+Cargados con "Auto configure" de Resend (2026-10-02), todos en DNS only. Pendientes: los registros SPF/DKIM de Firebase Auth en el dominio raíz.
+
 ## Zona `amigueinvisible.com.ar`
 
 | Nombre | Tipo | Valor | Para qué | Valor real |
