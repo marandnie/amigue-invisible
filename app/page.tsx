@@ -43,7 +43,7 @@ export default async function Home() {
           Amigo invisible
         </p>
         <h1 className="mb-5 font-display text-4xl font-bold tracking-tight sm:text-6xl">
-          El sorteo, sin papelitos.
+          El sorteo del amigo invisible, sin papelitos.
         </h1>
         <p className="mb-8 text-lg text-muted-foreground">
           Organizá el amigo invisible de la familia, la oficina o los amigos en un par de minutos.
