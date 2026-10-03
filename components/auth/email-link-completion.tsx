@@ -1,13 +1,13 @@
 "use client";
 
-import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
+import { getAdditionalUserInfo, isSignInWithEmailLink, signInWithEmailLink, updateProfile } from "firebase/auth";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Input } from "@/components/ui/input";
 import { authErrorMessage } from "@/lib/auth-errors";
-import { EMAIL_LINK_STORAGE_KEY, startServerSession } from "@/lib/client-session";
+import { EMAIL_LINK_STORAGE_KEY, NAME_LINK_STORAGE_KEY, startServerSession } from "@/lib/client-session";
 import { clientAuth } from "@/lib/firebase/client";
 
 type State = "verificando" | "pedir-email" | "entrando" | "invalido" | "error";
@@ -22,10 +22,19 @@ export function EmailLinkCompletion({ next }: { next: string }) {
       setState("entrando");
       try {
         const cred = await signInWithEmailLink(clientAuth(), email, window.location.href);
+        let name: string | null = null;
         try {
+          name = window.localStorage.getItem(NAME_LINK_STORAGE_KEY);
           window.localStorage.removeItem(EMAIL_LINK_STORAGE_KEY);
+          window.localStorage.removeItem(NAME_LINK_STORAGE_KEY);
         } catch {
           // nada
+        }
+        // Solo en el alta: a una cuenta existente no se le pisa el nombre. Tiene que ir antes de
+        // crear la sesión, porque ahí el servidor arma el perfil con el nombre de Auth.
+        const isNew = getAdditionalUserInfo(cred)?.isNewUser === true;
+        if (isNew && name?.trim() && !cred.user.displayName) {
+          await updateProfile(cred.user, { displayName: name.trim().slice(0, 60) }).catch(() => undefined);
         }
         await startServerSession(cred.user);
         window.location.assign(next);
