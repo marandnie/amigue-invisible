@@ -6,6 +6,7 @@ import {
   drawAction,
   regenerateInviteAction,
   removeParticipantAction,
+  resendInviteEmailAction,
 } from "@/app/grupos/actions";
 import { ActionButton } from "@/components/groups/action-button";
 import { AddParticipantsForm } from "@/components/groups/add-participants-form";
@@ -102,6 +103,11 @@ async function HostView({ access }: { access: Access }) {
                         ? `✓ Se sumó${p.joinedEmail && !p.isHost ? ` con ${p.joinedEmail}` : ""}`
                         : `Pendiente${p.email ? ` · ${p.email}` : ""}`}
                     </p>
+                    {!p.uid && p.inviteEmailStatus ? (
+                      <p className={`text-xs ${p.inviteEmailStatus === "fallo" ? "text-destructive" : "text-muted-foreground"}`}>
+                        {p.inviteEmailStatus === "enviado" ? "✉ Invitación enviada por mail" : "✉ No se pudo mandar el mail"}
+                      </p>
+                    ) : null}
                   </div>
                   {open ? (
                     <div className="flex flex-wrap items-start gap-2">
@@ -109,6 +115,15 @@ async function HostView({ access }: { access: Access }) {
                         <>
                           <CopyLinkButton url={url} />
                           <a href={whatsappShareUrl(inviteMessage(p.name, group.name, url))} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", size: "sm" })}>WhatsApp</a>
+                          {p.email ? (
+                            <ActionButton
+                              action={resendInviteEmailAction.bind(null, group.id, p.id)}
+                              variant="ghost"
+                              pendingLabel="Enviando…"
+                            >
+                              Reenviar mail
+                            </ActionButton>
+                          ) : null}
                           <ActionButton
                             action={regenerateInviteAction.bind(null, group.id, p.id)}
                             variant="ghost"

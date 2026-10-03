@@ -91,7 +91,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 
 **Independent Test**: quickstart §7 US3
 
-- [ ] T028 [US3] 🖐️ *(Email/Contraseña y Google ya habilitados por CLI el 2026-10-02)* Configurar Firebase Auth: Email/Contraseña + Email link, Google, una cuenta por email, contraseña mín. 10, plantillas en español, dominio autorizado `amigoinvisible.com.ar` (quickstart §2.5)
+- [x] T028 [US3] 🖐️ *(hecho el 2026-10-02)* Configurar Firebase Auth: Email/Contraseña + Email link, Google, una cuenta por email, contraseña mín. 10, plantillas en español, dominio autorizado `amigoinvisible.com.ar` (quickstart §2.5)
 - [x] T029 [P] [US3] Crear `lib/session.ts` con `getSessionUser()` y `requireUser(nextPath)` según `contracts/session-api.md`
 - [x] T030 [US3] Crear `app/api/sesion/route.ts`: `POST` (verifica el token, exige login reciente, chequea Origin, crea la cookie `__session` de 14 días, upsert de `users/{uid}`) y `DELETE` (revoca y borra la cookie). Depende de T029
 - [x] T031 [P] [US3] Proteger rutas privadas sin middleware: `requireUser(ruta)` en cada página; `next` solo acepta rutas internas (`lib/safe-next.ts` + `tests/unit/safe-next.test.ts`)
@@ -138,6 +138,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 
 ## Phase 8: Polish
 
+- [x] T054 [US2] `middleware.ts` + `lib/canonical.ts`: `*.hosted.app` → `https://amigoinvisible.com.ar` con 308 (con tests)
 - [ ] T053 [US2] FR-002 pide redirección permanente (301/308) y App Hosting responde 302. Decidir si alcanza o aplicar el plan B de research R7 (Redirect Rule de Cloudflare con 301) para `www` y `amigueinvisible.com.ar`
 
 - [x] T049 [P] Reescribir `README.md`: stack Firebase, desarrollo con emuladores, deploy, DNS y rollback. Marcar como obsoletas las secciones de stack y deploy de `DESIGN.md` (con un aviso arriba del documento, sin borrar su contenido)

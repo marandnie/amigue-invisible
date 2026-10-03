@@ -53,6 +53,14 @@ npx playwright install chromium     # una vez
 npm run test:e2e                    # terminal 3; capturas en test-results/e2e/
 ```
 
+## Mails
+
+Los mails de la app (invitaciones y aviso de sorteo) salen por [Resend](https://resend.com). En desarrollo, sin `RESEND_API_KEY`, se muestran en la consola. En producción la clave va en Secret Manager:
+
+```bash
+firebase apphosting:secrets:set RESEND_API_KEY --project amigue-invisible-604df
+```
+
 ## Deploy
 
 Cada merge a `main` despliega solo (Firebase App Hosting). Si el build falla, queda la versión anterior.

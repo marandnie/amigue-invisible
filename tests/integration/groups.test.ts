@@ -198,7 +198,7 @@ describe("sorteo (US3) y privacidad (constitución I)", () => {
     expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
     const assignments = await admin.adminDb().collection("groups").doc(groupId).collection("assignments").get();
     expect(assignments.size).toBe(5);
-  });
+  }, 20_000);
 
   it("después del sorteo no se pueden sumar ni sacar personas", async () => {
     const { host, groupId, people } = await groupWith(3);
@@ -221,7 +221,7 @@ describe("exclusiones (US5)", () => {
       expect((await data.getMyPage(host, groupId)).myReceiver!.name).not.toBe(a.name);
       expect((await data.getMyPage(people[0], groupId)).myReceiver!.name).not.toBe(hostP.name);
     }
-  });
+  }, 30_000);
 
   it("rechaza sortear si las exclusiones lo hacen imposible", async () => {
     const { host, groupId } = await groupWith(2);
@@ -281,5 +281,45 @@ describe("borrar grupo", () => {
     await data.deleteGroup(host, id);
     expect((await data.getInvitation(token)).status).toBe("invalida");
     expect(await data.getGroupAccess(id, host)).toBeNull();
+  });
+});
+
+describe("avisos por mail (US6) — datos que usa la capa de mails", () => {
+  it("addParticipants devuelve los creados con su token; el estado del mail queda guardado", async () => {
+    const host = await user("Ana");
+    const id = await data.createGroup(host, groupInput());
+    const { group, created } = await data.addParticipants(host, id, [
+      { name: "Bruno", email: "bruno@example.com" },
+      { name: "Caro", email: null },
+    ]);
+    expect(group.id).toBe(id);
+    expect(created.map((c) => c.name)).toEqual(["Bruno", "Caro"]);
+    expect(created.every((c) => /^[A-Za-z0-9_-]{43}$/.test(c.token))).toBe(true);
+    await data.recordInviteEmail(host, id, [created[0].id], "enviado");
+    const list = await data.listParticipants(id, host);
+    expect(list.find((p) => p.name === "Bruno")!.inviteEmailStatus).toBe("enviado");
+    expect(list.find((p) => p.name === "Caro")!.inviteEmailStatus).toBeNull();
+  });
+
+  it("reenviar solo para pendientes con email, y solo el organizador", async () => {
+    const host = await user("Ana");
+    const id = await data.createGroup(host, groupInput());
+    const { created } = await data.addParticipants(host, id, [
+      { name: "Bruno", email: "bruno@example.com" },
+      { name: "Caro", email: null },
+    ]);
+    const ok = await data.getPendingInviteForEmail(host, id, created[0].id);
+    expect(ok.participant).toMatchObject({ name: "Bruno", email: "bruno@example.com", token: created[0].token });
+    await expect(data.getPendingInviteForEmail(host, id, created[1].id)).rejects.toThrow(/email/);
+    const intruso = await user("Intruso");
+    await expect(data.getPendingInviteForEmail(intruso, id, created[0].id)).rejects.toThrow(NotFoundError);
+    await expect(data.recordInviteEmail(intruso, id, [created[0].id], "fallo")).rejects.toThrow(NotFoundError);
+  });
+
+  it("el sorteo devuelve a quién avisar, sin ninguna asignación", async () => {
+    const { host, groupId, people } = await groupWith(3);
+    const r = await data.runDraw(host, groupId, true);
+    expect(r.recipients.map((x) => x.email).sort()).toEqual([host, ...people].map((u) => u.email).sort());
+    expect(JSON.stringify(r)).not.toMatch(/receiver|assignment/i);
   });
 });

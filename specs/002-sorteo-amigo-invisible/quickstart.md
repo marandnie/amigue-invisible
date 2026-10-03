@@ -38,6 +38,12 @@ Usá 3 cuentas (por ejemplo, tu Google, un email con contraseña y otro con link
 - [ ] Cargar 2 ítems (uno con link de Mercado Libre) → quien te regala los ve.
 - [ ] Un link `javascript:` → rechazado.
 
+### US6 – Mails
+- [ ] Agregar a alguien con email → le llega la invitación (remitente `no-responder@avisos.amigoinvisible.com.ar`) y el organizador ve "✉ Invitación enviada por mail".
+- [ ] "Reenviar mail" → llega de nuevo, con el mismo link.
+- [ ] Hacer el sorteo → a cada participante le llega "Ya se hizo el sorteo" **sin** el nombre de a quién le regala.
+- [ ] Responder la invitación → la respuesta le llega al organizador.
+
 ### US5 – Exclusiones
 - [ ] Excluir a A y B (mutua) → sortear varias veces en grupos de prueba → nunca A↔B.
 - [ ] Con 3 personas, excluir todos los pares → aviso de que es imposible; el sorteo no se hace.

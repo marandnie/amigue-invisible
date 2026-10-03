@@ -53,6 +53,7 @@ Formato: Decisión / Por qué / Alternativas descartadas. Todas las decisiones r
 - **Por qué**: todo queda en un mismo lugar, Cloudflare se usa solo como DNS y no hace falta código.
 - **A verificar**: que la redirección conserve la ruta y el query string (FR-002). Lo valida `scripts/check-domains.sh`.
 - **Plan B**: *Redirect Rule* de Cloudflare (registro proxied + regla 301 dinámica `concat("https://amigoinvisible.com.ar", http.request.uri)`) solo para la zona `amigueinvisible.com.ar`.
+- **Resultado (2026-10-02)**: la redirección de App Hosting conserva ruta y query, pero responde **302**. El dominio por defecto `*.hosted.app` no se puede redirigir desde la consola, así que se agregó un `middleware.ts` que responde **308** a `*.hosted.app` (y también a `www` y `amigueinvisible` si algún día esos dominios pasan a servir la app en vez de redirigir). Para tener 308 en todos, alcanza con cambiar esos tres dominios en App Hosting de "Redirect" a servir el backend (T053).
 
 ## R8. DNS
 
@@ -65,7 +66,7 @@ Formato: Decisión / Por qué / Alternativas descartadas. Todas las decisiones r
 
 - **Decisión**: los mails de acceso y verificación los manda Firebase Auth con **dominio propio** (remitente `noreply@amigoinvisible.com.ar`). Se agregan en Cloudflare los registros TXT/CNAME que pide la consola, y un DMARC inicial `v=DMARC1; p=none; rua=mailto:<responsable>`.
 - **Por qué**: cero infraestructura extra y mejor entregabilidad (SC-006).
-- **Para la feature 002**: los mails propios de la app (invitación, "ya se hizo el sorteo") necesitan un proveedor transaccional. Candidato: Resend (ya se usa en mandieto.com.ar). **Ojo**: el plan free de Resend permite 1 dominio (≈3.000 mails/mes, 100/día; verificar precios vigentes). Si ese cupo ya está ocupado, hay que evaluar el plan pago o una alternativa. Se decide en el plan de la 002.
+- **Para la feature 002**: los mails propios de la app (invitación, "ya se hizo el sorteo") van con **Resend** (decidido el 2026-10-02). Plan free al 2026-10: 3 dominios por equipo, 3.000 mails/mes y **100 por día**. Ver research R7 de la 002.
 - **Cuidado con SPF**: un dominio admite un solo registro `v=spf1`. Si después se suma otro remitente en el dominio raíz, se combinan en un único registro.
 
 ## R10. Costo estimado (constitución III)

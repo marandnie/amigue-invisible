@@ -41,7 +41,17 @@ Formato: Decisión / Por qué / Alternativas descartadas.
 
 ## R7. Avisos por mail (US6)
 
-- **Decisión**: **diferido**. Las invitaciones salen por link (WhatsApp o copiar) y el sorteo se ve en la app. El proveedor transaccional se decide en la próxima iteración (candidato Resend; ver research R9 de la 001). En esta iteración, ningún flujo depende del mail.
+- **Decisión** (2026-10-02): **Resend**, por su API REST con `fetch`, sin SDK. Va un solo pedido por lote (`/emails/batch`, hasta 100 mails).
+  - Remitente: `Amigo Invisible <no-responder@avisos.amigoinvisible.com.ar>`.
+  - En las invitaciones, el `reply_to` es el email del organizador: si alguien responde, le llega a quien organiza.
+- **Cuándo se manda**:
+  - **Invitación**: al agregar personas con email, y con "Reenviar mail".
+  - **"Ya se hizo el sorteo"**: a cada participante sumado. El mail no dice a quién le toca: el texto solo lleva el nombre de quien lo recibe, y la función que lo arma no recibe la asignación.
+- **Si falla**: el sorteo y las invitaciones siguen funcionando con los links. Para la invitación, el organizador ve "No se pudo mandar el mail" y puede reenviar.
+- **Rebotes (US6, escenario 3)**: el estado guardado es el de la respuesta de la API (aceptado o no). Los rebotes posteriores necesitan el webhook de Resend firmado (svix). Queda como tarea aparte (T037).
+- **Secretos**: `RESEND_API_KEY` en Secret Manager, referenciado desde `apphosting.yaml`. En desarrollo, sin clave, los mails se muestran en la consola.
+- **Dominio de envío**: el subdominio `avisos.amigoinvisible.com.ar`, siguiendo la recomendación de Resend de usar un subdominio. Así la reputación de las invitaciones (que llegan a gente que todavía no se registró) queda separada de la del dominio raíz, que usa Firebase Auth para los links de acceso. Los registros de Resend quedan bajo `avisos.` y los cargó la configuración automática de Resend con Cloudflare: CNAME `rsend.avisos` y `send.avisos` hacia `*.forge.rmta.net`, y TXT `resend._domainkey.avisos` (DKIM). No tocan el SPF del dominio raíz. Además hay DMARC `p=none` en el dominio raíz, que cubre también `avisos`. Región: São Paulo (`sa-east-1`). Seguimiento de clics y aperturas desactivado: los links de invitación llevan tokens y no tienen por qué pasar por un redirector de terceros.
+- **Costo**: plan free (3 dominios, 3.000 mails/mes, **100 por día**). Un grupo de 30 personas son ~60 mails: invitación + aviso. En diciembre el tope diario puede quedar corto; si pasa, los mails fallan y la app sigue andando con los links. El salto es Pro a USD 20/mes.
 
 ## R8. Formatos y zona horaria
 
