@@ -29,6 +29,8 @@ export function AuthPanel({ mode, next }: { mode: Mode; next: string }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [linkEmail, setLinkEmail] = useState("");
+  // El mail se comparte entre "con contraseña" y "con link": al cambiar de vista no se pierde.
+  const [email, setEmail] = useState("");
 
   async function run(action: () => Promise<void>) {
     setBusy(true);
@@ -120,11 +122,19 @@ export function AuthPanel({ mode, next }: { mode: Mode; next: string }) {
       </div>
 
       {view === "password" ? (
-        <form onSubmit={withPassword} className="space-y-3">
+        <form key="password" onSubmit={withPassword} className="space-y-3">
           {mode === "registro" ? (
             <Input name="nombre" placeholder="Tu nombre" autoComplete="name" maxLength={60} required />
           ) : null}
-          <Input name="email" type="email" placeholder="tu@email.com" autoComplete="email" required />
+          <Input
+            name="email"
+            type="email"
+            placeholder="tu@email.com"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <Input
             name="password"
             type="password"
@@ -145,8 +155,16 @@ export function AuthPanel({ mode, next }: { mode: Mode; next: string }) {
           </button>
         </form>
       ) : (
-        <form onSubmit={withLink} className="space-y-3">
-          <Input name="email" type="email" placeholder="tu@email.com" autoComplete="email" required />
+        <form key="link" onSubmit={withLink} className="space-y-3">
+          <Input
+            name="email"
+            type="email"
+            placeholder="tu@email.com"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <Button type="submit" className="w-full" disabled={busy}>
             Mandame el link
           </Button>
