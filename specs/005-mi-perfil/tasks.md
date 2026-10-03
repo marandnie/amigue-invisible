@@ -6,4 +6,4 @@
 - [X] T004 `updateProfileAction` en `app/perfil/actions.ts` (uid de la sesión, FR-003)
 - [X] T005 Página `app/perfil/page.tsx` + `components/profile/profile-form.tsx` (FR-001, FR-002, FR-005)
 - [X] T006 Link "Mi perfil" en `components/navbar.tsx`
-- [ ] T007 Validar en producción: cambiar el nombre y ver el saludo nuevo en "Mis grupos"
+- [X] T007 Validar en producción: cambiar el nombre y ver el saludo nuevo en "Mis grupos" — *2026-10-03: probado con la cuenta de Yahoo*

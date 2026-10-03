@@ -26,8 +26,8 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 
 - [x] T001 Usar el repo `marandnie/amigue-invisible`: la versión Angular queda en el tag `legacy-angular`; rama `001-plataforma-gcp-dominio` con el scaffold Next.js (commit original del `git-repo.tar.gz`)
 - [x] T002 Commitear Spec Kit (`.specify/`, `.claude/skills/`, `specs/`) en la rama
-- [ ] T003 🖐️ Push de la rama `001-plataforma-gcp-dominio` y del tag `legacy-angular`; PR a `main`; desactivar GitHub Pages en el repo (tenía `CNAME` = amigueinvisible.com.ar) — *2026-10-02: push y tag hechos, Pages despublicado; falta el PR*
-- [ ] T004 [P] 🖐️ Crear el proyecto Firebase (`amigue-invisible-604df`, creado), pasarlo a Blaze y crear el presupuesto de USD 5/mes con alertas 50/90/100 % (quickstart §2.1–2.2) — *Blaze hecho; falta el presupuesto*
+- [X] T003 🖐️ Push de la rama `001-plataforma-gcp-dominio` y del tag `legacy-angular`; PR a `main`; desactivar GitHub Pages en el repo (tenía `CNAME` = amigueinvisible.com.ar) — *2026-10-02: push y tag hechos, Pages despublicado; falta el PR* — *2026-10-03: PR #1 mergeado; Pages quedó publicando solo el README en mandieto.com.ar/amigue-invisible/ (sin CNAME propio)*
+- [X] T004 [P] 🖐️ Crear el proyecto Firebase (`amigue-invisible-604df`, creado), pasarlo a Blaze y crear el presupuesto de USD 5/mes con alertas 50/90/100 % (quickstart §2.1–2.2) — *Blaze hecho; falta el presupuesto* — *2026-10-03: presupuesto creado*
 - [x] T005 [P] 🖐️ Crear en Cloudflare las zonas `amigoinvisible.com.ar` y `amigueinvisible.com.ar` (plan Free) y anotar los nameservers en `contracts/dns-records.md`
 - [x] T006 🖐️ Delegar ambos dominios en nic.ar a los nameservers de Cloudflare y verificar con `dig +short NS` (depende de T005)
 
@@ -104,7 +104,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 - [x] T038 [US3] Reescribir `components/navbar.tsx` en español con estado de sesión (vía `getSessionUser`) y botón "Salir" (`DELETE /api/sesion`)
 - [x] T039 [US3] Hacer que la landing (`app/page.tsx`) muestre "Ir a mis grupos" si hay sesión
 - [ ] T040 [US3] 🖐️ Mails de Auth con dominio propio: registros SPF/DKIM/DMARC en Cloudflare y *Apply custom domain* (quickstart §6)
-- [ ] T041 [US3] Primer rollout con login: verificar que `createSessionCookie` funciona en producción; si falla por permisos, dar el rol *Firebase Authentication Admin* a la service account del backend (research R5)
+- [X] T041 [US3] Primer rollout con login: verificar que `createSessionCookie` funciona en producción; si falla por permisos, dar el rol *Firebase Authentication Admin* a la service account del backend (research R5)
 - [ ] T042 [US3] Validar US3 con el quickstart §7 en Chrome Android, Safari iOS y desktop
 - [x] T052 [US3] Smoke test de punta a punta de la sesión contra los emuladores: `tests/smoke/session.sh` (`npm run test:smoke`)
 
@@ -118,7 +118,7 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 
 **Independent Test**: quickstart §7 US4
 
-- [ ] T043 [US4] Verificar que los rollouts automáticos están activos en `main` y que el check de GitHub muestra el estado del rollout
+- [X] T043 [US4] Verificar que los rollouts automáticos están activos en `main` y que el check de GitHub muestra el estado del rollout
 - [ ] T044 [US4] Probar un build roto en una rama → merge → confirmar que el sitio sigue con la versión anterior; revertir
 - [ ] T045 [US4] Probar el rollback a un rollout anterior desde la consola y documentar el procedimiento en `README.md`
 
@@ -130,9 +130,9 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 
 **Independent Test**: quickstart §7 US5
 
-- [ ] T046 [US5] Verificar el presupuesto y los destinatarios de las alertas (creados en T004)
+- [X] T046 [US5] Verificar el presupuesto y los destinatarios de las alertas (creados en T004)
 - [ ] T047 [US5] Verificar en Cloud Run que el servicio del backend tiene `maxInstances: 3` y que baja a 0 sin tráfico
-- [ ] T048 [P] [US5] 🖐️ Agendar un recordatorio en el calendario para renovar los dominios (17/03/2027, un mes antes del vencimiento)
+- [X] T048 [P] [US5] 🖐️ Agendar un recordatorio en el calendario para renovar los dominios (17/03/2027, un mes antes del vencimiento) — *agendado en Google Calendar para el 17/03/2027*
 
 ---
 
@@ -140,8 +140,8 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 
 - [x] T054 [US2] `middleware.ts` + `lib/canonical.ts`: `*.hosted.app` → `https://amigoinvisible.com.ar` con 308 (con tests)
 - [x] T055 [US3] Login con Google en iPhone (research R6): `lib/firebase/build-config.mjs` (config web desde `FIREBASE_WEBAPP_CONFIG` + `authDomain` propio), *rewrites* de `/__/auth/*` y `/__/firebase/*` en `next.config.mjs`, `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` en `apphosting.yaml`, con tests
-- [ ] T056 [US3] 🖐️ Agregar `https://amigoinvisible.com.ar/__/auth/handler` en *Authorized redirect URIs* del cliente OAuth web (Google Cloud → APIs & Services → Credentials). Va **antes** de mergear T055
-- [ ] T057 [US3] Después del deploy: `curl -sI https://amigoinvisible.com.ar/__/auth/handler` → 200, y entrar con Google desde un iPhone (Safari y Chrome)
+- [X] T056 [US3] 🖐️ Agregar `https://amigoinvisible.com.ar/__/auth/handler` en *Authorized redirect URIs* del cliente OAuth web (Google Cloud → APIs & Services → Credentials). Va **antes** de mergear T055
+- [X] T057 [US3] Después del deploy: `curl -sI https://amigoinvisible.com.ar/__/auth/handler` → 200, y entrar con Google desde un iPhone (Safari y Chrome) — *2026-10-03: handler → 200 y login con Google en iPhone OK*
 - [ ] T053 [US2] FR-002 pide redirección permanente (301/308) y App Hosting responde 302. Decidir si alcanza o aplicar el plan B de research R7 (Redirect Rule de Cloudflare con 301) para `www` y `amigueinvisible.com.ar`
 
 - [x] T049 [P] Reescribir `README.md`: stack Firebase, desarrollo con emuladores, deploy, DNS y rollback. Marcar como obsoletas las secciones de stack y deploy de `DESIGN.md` (con un aviso arriba del documento, sin borrar su contenido)

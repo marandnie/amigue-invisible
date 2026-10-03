@@ -20,6 +20,6 @@
 
 ## Fase 4 — Producción
 
-- [ ] T010 Crear la service account y el job de Cloud Scheduler (comandos en plan.md)
-- [ ] T011 Merge a `main` y verificar el rollout
-- [ ] T012 Validar: cuenta nueva → llega el aviso; `gcloud scheduler jobs run` → llega el reporte
+- [X] T010 Crear la service account y el job de Cloud Scheduler (comandos en plan.md)
+- [X] T011 Merge a `main` y verificar el rollout
+- [X] T012 Validar: cuenta nueva → llega el aviso; `gcloud scheduler jobs run` → llega el reporte — *2026-10-03: llegaron el aviso de alta y el reporte*

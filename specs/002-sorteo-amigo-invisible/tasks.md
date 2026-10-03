@@ -78,7 +78,7 @@ description: "Tareas de la feature 002: sorteo de amigo invisible"
 ## Phase 9: User Story 6 – Avisos por mail (P3)
 
 - [x] T031 [US6] Elegir proveedor: Resend (research R7)
-- [ ] T031b [US6] 🖐️ Dominio `amigoinvisible.com.ar` en Resend + registros en Cloudflare; API key con permiso de envío; `firebase apphosting:secrets:set RESEND_API_KEY` (antes de mergear)
+- [X] T031b [US6] 🖐️ Dominio `amigoinvisible.com.ar` en Resend + registros en Cloudflare; API key con permiso de envío; `firebase apphosting:secrets:set RESEND_API_KEY` (antes de mergear)
 - [x] T032 [US6] Mail de invitación y mail de "ya se hizo el sorteo" (sin revelar el nombre): `lib/email/*`, `lib/notifications.ts`, estado del envío y "Reenviar mail" (tests unit + integración)
 - [ ] T037 [US6] Rebotes: webhook de Resend firmado (svix) que marque el estado como "rebotó"
 
