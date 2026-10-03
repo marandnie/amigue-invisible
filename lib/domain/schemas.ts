@@ -126,3 +126,15 @@ export const exclusionSchema = z
     mutual: z.preprocess((v) => v === "on" || v === "true" || v === true, z.boolean()),
   })
   .refine((v) => v.from !== v.to, { message: "Elegí dos personas distintas", path: ["to"] });
+
+// ---------- feature 005: mi perfil ----------
+
+export const profileSchema = z.object({
+  displayName: z
+    .string({ required_error: "Poné tu nombre" })
+    .trim()
+    .min(1, "Poné tu nombre")
+    .max(MAX_NAME, `Máximo ${MAX_NAME} caracteres`),
+});
+
+export type ProfileInput = z.infer<typeof profileSchema>;

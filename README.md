@@ -8,6 +8,9 @@ Se desarrolla con **Spec-Driven Development** usando [GitHub Spec Kit](https://g
 - Features: [`specs/`](specs/). Cada una con `spec.md` → `plan.md` → `tasks.md`.
   - [`001-plataforma-gcp-dominio`](specs/001-plataforma-gcp-dominio/): dominio, login y deploy
   - [`002-sorteo-amigo-invisible`](specs/002-sorteo-amigo-invisible/): grupos, invitaciones, sorteo, listas de deseos y exclusiones
+  - [`003-contacto-acerca-de`](specs/003-contacto-acerca-de/): contacto, acerca de y política de privacidad (en especificación)
+  - [`004-avisos-de-registro`](specs/004-avisos-de-registro/): aviso por mail de cada alta y reporte semanal para la administradora
+  - [`005-mi-perfil`](specs/005-mi-perfil/): cambiar el nombre para mostrar
 - Con Claude Code: `/speckit-specify`, `/speckit-clarify`, `/speckit-plan`, `/speckit-tasks`, `/speckit-implement`.
 
 La versión anterior en Angular quedó en el tag `legacy-angular`.

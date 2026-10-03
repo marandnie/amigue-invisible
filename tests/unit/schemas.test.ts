@@ -8,6 +8,7 @@ import {
   toLocalDateTimeInput,
   wishSchema,
 } from "@/lib/domain/schemas";
+import { profileSchema } from "@/lib/domain/schemas";
 
 describe("parseParticipantLines", () => {
   it("acepta nombre solo, con coma y con espacio antes del email", () => {
@@ -71,5 +72,20 @@ describe("groupSchema", () => {
     expect(groupSchema.safeParse({ name: "X", eventAt: "mañana" }).success).toBe(false);
     expect(groupSchema.safeParse({ name: "X", budget: "-5" }).success).toBe(false);
     expect(parseLocalDateTime("2026-13-40T99:99")).toBeNull();
+  });
+});
+
+describe("profileSchema (005)", () => {
+  it("recorta espacios", () => {
+    expect(profileSchema.parse({ displayName: "  Marina Nieto  " }).displayName).toBe("Marina Nieto");
+  });
+  it.each([[""], ["   "], ["x".repeat(61)]])("rechaza %j", (displayName) => {
+    expect(profileSchema.safeParse({ displayName }).success).toBe(false);
+  });
+  it("rechaza si falta el campo", () => {
+    expect(profileSchema.safeParse({}).success).toBe(false);
+  });
+  it("acepta 60 caracteres", () => {
+    expect(profileSchema.safeParse({ displayName: "x".repeat(60) }).success).toBe(true);
   });
 });

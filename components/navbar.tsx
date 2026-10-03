@@ -20,6 +20,9 @@ export async function Navbar() {
               <Link href="/mis-grupos" className="text-muted-foreground hover:text-foreground">
                 Mis grupos
               </Link>
+              <Link href="/perfil" className="text-muted-foreground hover:text-foreground">
+                Mi perfil
+              </Link>
               <LogoutButton />
             </>
           ) : (
