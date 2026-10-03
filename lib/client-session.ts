@@ -28,3 +28,5 @@ export async function endServerSession(): Promise<void> {
 }
 
 export const EMAIL_LINK_STORAGE_KEY = "amigo-invisible:email-para-ingresar";
+/** Nombre elegido al registrarse con link por mail; se aplica al abrir el link. */
+export const NAME_LINK_STORAGE_KEY = "amigo-invisible:nombre-para-registro";

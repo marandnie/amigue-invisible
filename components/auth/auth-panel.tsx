@@ -16,7 +16,7 @@ import { InAppBrowserNotice } from "@/components/auth/in-app-browser-notice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authErrorMessage } from "@/lib/auth-errors";
-import { EMAIL_LINK_STORAGE_KEY, startServerSession } from "@/lib/client-session";
+import { EMAIL_LINK_STORAGE_KEY, NAME_LINK_STORAGE_KEY, startServerSession } from "@/lib/client-session";
 import { clientAuth } from "@/lib/firebase/client";
 
 type Mode = "ingresar" | "registro";
@@ -29,8 +29,9 @@ export function AuthPanel({ mode, next }: { mode: Mode; next: string }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [linkEmail, setLinkEmail] = useState("");
-  // El mail se comparte entre "con contraseña" y "con link": al cambiar de vista no se pierde.
+  // Nombre y mail se comparten entre "con contraseña" y "con link": al cambiar de vista no se pierden.
   const [email, setEmail] = useState("");
+  const [nombre, setNombre] = useState("");
 
   async function run(action: () => Promise<void>) {
     setBusy(true);
@@ -82,6 +83,10 @@ export function AuthPanel({ mode, next }: { mode: Mode; next: string }) {
       await sendSignInLinkToEmail(clientAuth(), email, { url, handleCodeInApp: true });
       try {
         window.localStorage.setItem(EMAIL_LINK_STORAGE_KEY, email);
+        // En el registro, el nombre se aplica al abrir el link (components/auth/email-link-completion.tsx).
+        const name = mode === "registro" ? nombre.trim().slice(0, 60) : "";
+        if (name) window.localStorage.setItem(NAME_LINK_STORAGE_KEY, name);
+        else window.localStorage.removeItem(NAME_LINK_STORAGE_KEY);
       } catch {
         // Sin storage: al abrir el link se le pide el email de nuevo.
       }
@@ -124,7 +129,15 @@ export function AuthPanel({ mode, next }: { mode: Mode; next: string }) {
       {view === "password" ? (
         <form key="password" onSubmit={withPassword} className="space-y-3">
           {mode === "registro" ? (
-            <Input name="nombre" placeholder="Tu nombre" autoComplete="name" maxLength={60} required />
+            <Input
+              name="nombre"
+              placeholder="Tu nombre"
+              autoComplete="name"
+              maxLength={60}
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              required
+            />
           ) : null}
           <Input
             name="email"
@@ -156,6 +169,17 @@ export function AuthPanel({ mode, next }: { mode: Mode; next: string }) {
         </form>
       ) : (
         <form key="link" onSubmit={withLink} className="space-y-3">
+          {mode === "registro" ? (
+            <Input
+              name="nombre"
+              placeholder="Tu nombre"
+              autoComplete="name"
+              maxLength={60}
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              required
+            />
+          ) : null}
           <Input
             name="email"
             type="email"
