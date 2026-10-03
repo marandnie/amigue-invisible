@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 
 import { Navbar } from "@/components/navbar";
+import { SiteFooter } from "@/components/site-footer";
 
 import "./globals.css";
 
@@ -36,9 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-background font-sans antialiased">
         <Navbar />
         <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
-        <footer className="mx-auto max-w-5xl px-4 py-8 text-center text-sm text-muted-foreground">
-          Hecho en Buenos Aires para que nadie se quede sin regalo.
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );

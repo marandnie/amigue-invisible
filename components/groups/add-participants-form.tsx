@@ -23,6 +23,7 @@ export function AddParticipantsForm({ action }: { action: (prev: FormState, fd: 
           {pending ? "Agregando…" : "Agregar"}
         </Button>
       </div>
+      <p className="text-xs text-muted-foreground">Cargá solo gente que esté de acuerdo en participar.</p>
       <details className="rounded-md border p-3 text-sm">
         <summary className="cursor-pointer font-medium">Agregar varias personas de una</summary>
         <p className="my-2 text-muted-foreground">

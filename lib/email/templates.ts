@@ -191,3 +191,32 @@ export function weeklyReportEmail(p: {
   });
   return { subject: subjectLine(`Amigo Invisible · resumen semanal: ${newCount} alta(s) nueva(s)`), html, text };
 }
+
+// --- Feature 003: mensaje de contacto ---------------------------------------------------
+// Va solo a la casilla del equipo. Nunca incluye asignaciones (constitución I, FR-011).
+
+export function contactMessageEmail(p: {
+  nombre: string;
+  email: string;
+  motivo: string;
+  mensaje: string;
+  fecha: string;
+  conSesion: boolean;
+  grupo: { id: string; name: string } | null;
+}): RenderedEmail {
+  const { html, text } = layout({
+    preheader: `${p.motivo} · ${p.nombre}`,
+    heading: `Mensaje de contacto: ${p.motivo}`,
+    paragraphs: p.mensaje.split(/\r?\n/).filter((l) => l.trim() !== ""),
+    details: [
+      ["Nombre", p.nombre],
+      ["Mail", p.email],
+      ["Motivo", p.motivo],
+      ["Cuándo", p.fecha],
+      ["Sesión", p.conSesion ? "Sí, con cuenta" : "Sin sesión"],
+      ["Grupo", p.grupo ? `${p.grupo.name} (${p.grupo.id})` : null],
+    ],
+    cta: { label: `Responder a ${p.nombre}`, url: `mailto:${p.email}` },
+  });
+  return { subject: subjectLine(`[Contacto] ${p.motivo} · ${p.nombre}`), html, text };
+}

@@ -51,6 +51,12 @@ export default async function GrupoPage({ params, searchParams }: Props) {
         </p>
       ) : null}
       {access.role === "organizador" ? <HostView access={access} /> : <ParticipantView access={access} />}
+      <p className="text-center text-sm text-muted-foreground">
+        ¿Algún problema con este grupo?{" "}
+        <Link href={`/contacto?grupo=${access.group.id}`} className="underline underline-offset-2">
+          Escribinos
+        </Link>
+      </p>
     </div>
   );
 }

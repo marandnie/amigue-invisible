@@ -117,6 +117,16 @@ export function AuthPanel({ mode, next }: { mode: Mode; next: string }) {
     <div className="space-y-5">
       <InAppBrowserNotice />
 
+      {mode === "registro" ? (
+        <p className="text-center text-xs text-muted-foreground">
+          Al crear tu cuenta aceptás la{" "}
+          <Link href="/privacidad" target="_blank" className="underline underline-offset-2">
+            Política de privacidad
+          </Link>
+          .
+        </p>
+      ) : null}
+
       <Button variant="outline" className="w-full" onClick={withGoogle} disabled={busy}>
         Continuar con Google
       </Button>
