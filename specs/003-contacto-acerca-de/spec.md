@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-03
 
-**Status**: Draft
+**Status**: Aprobada
 
 **Input**: Pedido de Marina: "No hay botón de contacto ni acerca de. Armá un requerimiento o spec al respecto." Ampliado en la clarificación con una política de privacidad formal.
 
