@@ -9,3 +9,4 @@
 - [X] T007 Página `/como-funciona`, enlazada desde la portada y Acerca de (FR-007, FR-008)
 - [ ] T008 🖐️ Después del deploy: enviar `sitemap.xml` en Search Console y pedir indexación de la portada
 - [ ] T009 Validar con la Prueba de resultados enriquecidos (SC-003)
+- [X] T010 Metadata en el `<head>` para todos los visitantes (`htmlLimitedBots: /.*/` en `next.config.mjs`): PageSpeed marcaba "Document does not have a meta description" porque Next 15 la mandaba al final del `<body>` (FR-001, FR-002)
