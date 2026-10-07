@@ -76,6 +76,12 @@ export default function PrivacidadPage() {
             ejemplo, errores). Para frenar abusos del formulario de contacto guardamos un código cifrado de tu
             dirección IP y de tu mail durante una hora, nunca los datos en claro.
           </li>
+          <li>
+            <strong>Estadísticas de visitas:</strong> en las páginas públicas (la portada, Cómo funciona, Acerca de,
+            Contacto, Privacidad, Ingresar y Crear cuenta) medimos visitas de forma agregada: qué página se abrió, desde
+            qué sitio llegaste, tu país y el tipo de navegador y dispositivo. No usa cookies ni identifica a personas, y
+            nunca se mide dentro de tus grupos, tus invitaciones ni tu perfil.
+          </li>
         </ul>
       </S>
 
@@ -84,6 +90,7 @@ export default function PrivacidadPage() {
           <li>Para organizar el sorteo y mostrarle a cada persona solo lo que le corresponde.</li>
           <li>Para mandarte los avisos de la app: invitaciones, aviso de sorteo y mails para entrar a tu cuenta.</li>
           <li>Para responder tus consultas.</li>
+          <li>Para saber cuánta gente visita las páginas públicas y mejorar el sitio, siempre con datos agregados.</li>
           <li>
             Para cuidar el servicio: cuando alguien se registra, la responsable recibe un aviso con su nombre, su mail
             y cómo entró, y un resumen semanal de registros. Sirve para detectar problemas y abusos.
@@ -115,6 +122,10 @@ export default function PrivacidadPage() {
           <li>
             <strong>Resend</strong> (Resend, Inc., Estados Unidos): envía los mails de la app, desde servidores en
             Brasil.
+          </li>
+          <li>
+            <strong>Cloudflare</strong> (Cloudflare, Inc., Estados Unidos): resuelve el dominio y mide las visitas de
+            las páginas públicas (Cloudflare Web Analytics). Guarda el detalle 7 días y después solo totales.
           </li>
         </ul>
         <p>

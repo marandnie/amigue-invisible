@@ -52,3 +52,7 @@ env:
     value: reporte-semanal@amigue-invisible-604df.iam.gserviceaccount.com
     availability:
       - RUNTIME
+
+  # Feature 007: Cloudflare Web Analytics. El token es público (queda en el HTML); se inyecta en el build.
+  # Sin token, la app no carga el script.
+  # (se agrega cuando esté el token: T006 de specs/007-analitica-web)
