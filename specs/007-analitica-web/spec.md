@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft
+**Status**: Aprobada
 
 **Input**: Marina quiere ver cuánta gente visita la web. El dominio está en Cloudflare en modo *DNS only*, así que la analítica de tráfico de Cloudflare queda vacía. Google Analytics se descartó en la 004.
 
@@ -15,7 +15,7 @@
 ### Session 2026-10-07
 
 - Q: ¿Con qué herramienta? → A: **Cloudflare Web Analytics** (gratis, sin cookies, funciona sin proxy, se ve en el mismo Cloudflare).
-- Q: La política de privacidad (003, FR-026) obliga a avisar por mail a quienes tienen cuenta si se agrega una finalidad nueva. ¿Se avisa? → [NEEDS CLARIFICATION: opción A, mandar un aviso corto por mail antes del deploy; opción B, no avisar porque la medición es solo en páginas públicas, sin cookies y sin datos que guardemos nosotros. Recomendación: **A**, son pocas cuentas y es lo que prometimos.]
+- Q: La política de privacidad (003, FR-026) obliga a avisar por mail a quienes tienen cuenta si se agrega una finalidad nueva. ¿Se avisa? → A: **Sí (opción A).** Se manda un aviso corto por mail a cada cuenta antes del deploy. → FR-006.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -46,7 +46,7 @@ Las páginas privadas y los links de invitación nunca se miden, para que ningú
 - **FR-003**: Sin el token configurado, la app MUST funcionar igual y no cargar el script (desarrollo, emuladores).
 - **FR-004**: El token MUST configurarse fuera del código de la app, en `apphosting.yaml`. No es secreto: queda visible en el HTML.
 - **FR-005**: La política de privacidad MUST actualizarse antes del deploy: Cloudflare como proveedor (EE. UU.), la medición agregada de visitas como finalidad, los datos que procesa y la nueva fecha. Lo de cookies sigue igual (no se agregan).
-- **FR-006**: Si la clarificación lo decide, MUST avisarse por mail a quienes tienen cuenta antes de que el cambio aplique (003, FR-026).
+- **FR-006**: Antes del deploy MUST mandarse un aviso por mail a cada persona con cuenta: qué cambia, que no usa cookies, que no se mide dentro de grupos ni invitaciones, y el link a la política (003, FR-026).
 
 ## Success Criteria *(mandatory)*
 
