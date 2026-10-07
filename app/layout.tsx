@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 
 import { Navbar } from "@/components/navbar";
 import { SiteFooter } from "@/components/site-footer";
+import { WebAnalytics } from "@/components/web-analytics";
 
 import "./globals.css";
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
         <SiteFooter />
+        <WebAnalytics />
       </body>
     </html>
   );
