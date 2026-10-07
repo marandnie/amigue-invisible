@@ -171,3 +171,4 @@ description: "Tareas de la feature 001: plataforma en producción con dominio pr
 1. **MVP = Setup + Foundational + US1 + US2**: la landing en su dominio, con los redirects. Es lo que pide la consigna ("deployar en los dominios").
 2. **Después US3** (login en producción), que desbloquea la feature 002.
 3. US4 y US5 son en su mayoría verificaciones; se cierran junto con US3.
+- [X] T058 HSTS (`max-age` 6 meses) y `X-Content-Type-Options: nosniff`: en Cloudflare para `www` y `amigueinvisible` (2026-10-07) y como encabezado de la app para el dominio principal (`next.config.mjs`), que está en DNS only. SPF `v=spf1 -all` en `avisos.` (no envía directo)
