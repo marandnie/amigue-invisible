@@ -55,4 +55,7 @@ env:
 
   # Feature 007: Cloudflare Web Analytics. El token es público (queda en el HTML); se inyecta en el build.
   # Sin token, la app no carga el script.
-  # (se agrega cuando esté el token: T006 de specs/007-analitica-web)
+  - variable: NEXT_PUBLIC_CF_ANALYTICS_TOKEN
+    value: c0e3426b0f8940868c19f31fb31a6745
+    availability:
+      - BUILD
